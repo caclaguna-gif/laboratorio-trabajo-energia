@@ -1,0 +1,3799 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="artifact-type" content="tool">
+  <meta name="design-style" content="carbon">
+  <title>Laboratorio Virtual de Trabajo y Energía — Ingeniería Mecánica y Robótica</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=IBM+Plex+Mono:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@1.43.0/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+
+      /* Page and surfaces (Carbon Light) */
+      --background: #ffffff;
+      --surface-container-low: #f4f4f4;
+      --surface-container: #f4f4f4;
+      --surface-container-high: #e0e0e0;
+
+      /* Ink */
+      --on-surface: #161616;
+      --on-surface-variant: #525252;
+
+      /* Rules */
+      --outline: #8d8d8d;
+      --outline-variant: #e0e0e0;
+
+      /* Accents */
+      --primary: #0f62fe;
+      --primary-hover: #0353e9;
+      --on-primary: #ffffff;
+      --primary-container: #d0e2ff;
+      --on-primary-container: #161616;
+      --secondary: #6f6f6f;
+      --tertiary: #198038;
+      --error: #da1e28;
+      --on-error: #ffffff;
+
+      /* Semantic */
+      --positive: #198038;
+      --positive-bg: #defbe6;
+      --warning: #b28600;
+      --warning-bg: #fcf4d6;
+      --error-bg: #fff1f1;
+      --focus: #0f62fe;
+
+      /* Data series */
+      --data-1: #0f62fe;
+      --data-2: #6929c4;
+      --data-3: #005d5d;
+      --data-4: #9f1853;
+      --data-context: #8d8d8d;
+
+      /* Fonts */
+      --font-headline: 'IBM Plex Sans', sans-serif;
+      --font-body: 'IBM Plex Sans', sans-serif;
+      --font-label: 'IBM Plex Mono', monospace;
+
+      /* Shape */
+      --rounded: 0.125rem;
+      --rounded-lg: 0.25rem;
+      --rounded-full: 0.75rem;
+
+      /* Style effects */
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.1);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.12);
+      --rule: 1px solid var(--outline-variant);
+      --field-rule: 1px solid var(--outline);
+      --indicator: 2px solid var(--primary);
+
+      /* Type scale (Focused Tool) */
+      --display-size: clamp(1.625rem, 1.3rem + 1.2vw, 2.25rem);
+      --headline-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+      --subhead-size: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+      --body-size: clamp(0.9375rem, 0.9rem + 0.15vw, 1rem);
+      --label-size: 0.75rem;
+
+      /* Spacing scale (4pt base) */
+      --space-xs: 0.25rem;
+      --space-sm: 0.5rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+
+      /* Motion */
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+      --dur-micro: 120ms;
+      --dur-short: 220ms;
+    }
+
+    [data-theme="dark"] {
+      color-scheme: dark;
+      --background: #161616;
+      --surface-container-low: #262626;
+      --surface-container: #262626;
+      --surface-container-high: #393939;
+      --on-surface: #f4f4f4;
+      --on-surface-variant: #c6c6c6;
+      --outline: #8d8d8d;
+      --outline-variant: #393939;
+      --primary: #78a9ff;
+      --primary-hover: #a6c8ff;
+      --on-primary: #161616;
+      --primary-container: #002d9c;
+      --on-primary-container: #f4f4f4;
+      --secondary: #a8a8a8;
+      --tertiary: #42be65;
+      --error: #ff8389;
+      --on-error: #161616;
+      --positive: #42be65;
+      --positive-bg: #07190d;
+      --warning: #f1c21b;
+      --warning-bg: #261d00;
+      --error-bg: #2d0709;
+      --focus: #78a9ff;
+      --data-1: #78a9ff;
+      --data-2: #be95ff;
+      --data-3: #08bdba;
+      --data-4: #ff7eb6;
+      --data-context: #6f6f6f;
+      --shadow-1: 0 2px 6px rgb(0 0 0 / 0.4);
+      --shadow-2: 0 4px 12px rgb(0 0 0 / 0.5);
+    }
+
+    /* Base reset */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: clip; margin: 0; padding: 0; }
+    header { position: static !important; }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      line-height: 1.5;
+      color: var(--on-surface);
+      background-color: var(--background);
+      transition: background-color var(--dur-short) var(--ease-out), color var(--dur-short) var(--ease-out);
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+    }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: 0;
+      background: var(--primary);
+      color: var(--on-primary);
+      padding: var(--space-sm) var(--space-md);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      z-index: 100;
+      text-decoration: none;
+    }
+    .skip-link:focus {
+      left: var(--space-md);
+      top: var(--space-md);
+    }
+
+    .page-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: var(--space-md) var(--space-lg);
+    }
+
+    /* Carbon Typography & Treatments */
+    .headline-display {
+      font-family: var(--font-headline);
+      font-size: var(--display-size);
+      font-weight: 300;
+      line-height: 1.15;
+      letter-spacing: 0;
+      margin: 0;
+    }
+    .headline-display strong { font-weight: 600; }
+
+    .headline-section {
+      font-family: var(--font-headline);
+      font-size: var(--headline-size);
+      font-weight: 300;
+      line-height: 1.2;
+      margin: 0;
+    }
+    .headline-section strong { font-weight: 600; }
+
+    .subhead {
+      font-family: var(--font-headline);
+      font-size: var(--subhead-size);
+      font-weight: 600;
+      line-height: 1.3;
+      margin: 0;
+    }
+
+    .mono-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--on-surface-variant);
+      display: block;
+    }
+
+    .key-value {
+      font-family: var(--font-label);
+      font-weight: 300;
+      font-size: clamp(1.5rem, 1.2rem + 1vw, 2rem);
+      line-height: 1.15;
+      color: var(--on-surface);
+    }
+
+    .mono-num {
+      font-family: var(--font-label);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .layer {
+      background: var(--surface-container);
+      border-radius: 0;
+      padding: var(--space-md);
+    }
+    .layer-nested {
+      background: var(--surface-container-high);
+      border-radius: 0;
+      padding: var(--space-md);
+    }
+
+    .section-head {
+      border-bottom: var(--rule);
+      padding-bottom: var(--space-sm);
+      margin-bottom: var(--space-lg);
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: var(--space-md);
+    }
+
+    /* Header & Top Navigation */
+    .lab-header {
+      border-bottom: var(--rule);
+      background: var(--background);
+    }
+
+    .header-top {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: var(--space-md);
+      padding-bottom: var(--space-md);
+    }
+
+    .header-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--space-sm);
+    }
+
+    .progress-pill-summary {
+      background: var(--surface-container);
+      padding: var(--space-xs) var(--space-md);
+      border-bottom: var(--indicator);
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      min-height: 44px;
+    }
+
+    .primary-nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      border-top: var(--rule);
+      margin-top: var(--space-sm);
+    }
+
+    .nav-tab {
+      background: transparent;
+      border: 0;
+      border-bottom: 2px solid transparent;
+      color: var(--on-surface-variant);
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      font-weight: 400;
+      padding: var(--space-sm) var(--space-lg);
+      min-height: 44px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-sm);
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .nav-tab:hover {
+      background: var(--surface-container);
+      color: var(--on-surface);
+    }
+    .nav-tab.is-active {
+      border-bottom: var(--indicator);
+      color: var(--on-surface);
+      font-weight: 600;
+      background: var(--surface-container-low);
+    }
+
+    /* Buttons (Carbon square corners, 44px+ touch targets) */
+    .btn {
+      font-family: var(--font-body);
+      font-size: var(--body-size);
+      font-weight: 400;
+      min-height: 44px;
+      padding: var(--space-sm) var(--space-lg);
+      border-radius: 0;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: var(--space-sm);
+      text-decoration: none;
+      transition: background-color var(--dur-micro) var(--ease-out), color var(--dur-micro) var(--ease-out);
+    }
+    .btn-primary {
+      background: var(--primary);
+      color: var(--on-primary);
+    }
+    .btn-primary:hover {
+      background: var(--primary-hover);
+    }
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border-color: var(--primary);
+    }
+    .btn-secondary:hover {
+      background: var(--surface-container);
+    }
+    .btn-ghost {
+      background: var(--surface-container);
+      color: var(--on-surface);
+      border-color: var(--outline-variant);
+    }
+    .btn-ghost:hover {
+      background: var(--surface-container-high);
+    }
+    .btn-danger-ghost {
+      background: transparent;
+      color: var(--error);
+      border-color: var(--error);
+    }
+    .btn-danger-ghost:hover {
+      background: var(--error-bg);
+    }
+    .btn-sm {
+      min-height: 44px;
+      padding: var(--space-xs) var(--space-md);
+      font-size: 0.875rem;
+    }
+
+    /* Tags (only tags use --rounded-full per Carbon) */
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-xs);
+      height: 24px;
+      padding: 0 var(--space-sm);
+      border-radius: var(--rounded-full);
+      font-family: var(--font-body);
+      font-size: 0.75rem;
+      font-weight: 500;
+      background: var(--primary-container);
+      color: var(--on-primary-container);
+    }
+    .tag-positive {
+      background: var(--positive-bg);
+      color: var(--positive);
+    }
+    .tag-warning {
+      background: var(--warning-bg);
+      color: var(--warning);
+    }
+    .tag-error {
+      background: var(--error-bg);
+      color: var(--error);
+    }
+
+    /* Form Controls */
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+      min-width: 0;
+    }
+    .field-label {
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--on-surface-variant);
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: var(--space-sm);
+    }
+    .input-box {
+      height: 44px;
+      width: 100%;
+      background: var(--background);
+      color: var(--on-surface);
+      border: 0;
+      border-bottom: var(--field-rule);
+      border-radius: 0;
+      padding: 0 var(--space-md);
+      font-family: var(--font-label);
+      font-size: var(--body-size);
+    }
+    .layer .input-box {
+      background: var(--background);
+    }
+    select.input-box {
+      padding-right: var(--space-xl);
+      cursor: pointer;
+    }
+    .input-box:focus {
+      outline: 2px solid var(--focus);
+      outline-offset: -2px;
+    }
+    input[type="range"] {
+      width: 100%;
+      min-height: 36px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      margin: 0;
+    }
+
+    /* Views */
+    .view-panel {
+      display: none;
+      padding-top: var(--space-lg);
+      padding-bottom: var(--space-2xl);
+    }
+    .view-panel.is-active {
+      display: block;
+    }
+
+    /* Grid layouts (minmax(0, 1fr)) */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-lg);
+    }
+    .kpi-tile {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .kpi-tile.is-lead {
+      border-bottom: var(--indicator);
+    }
+
+    .asymmetric-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+      gap: var(--space-md);
+    }
+
+    .card-wrapper { container-type: inline-size; }
+
+    /* Progress bar */
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      background: var(--surface-container-high);
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width var(--dur-short) var(--ease-out);
+    }
+
+    /* Callouts / Notifications */
+    .callout {
+      background: var(--surface-container);
+      padding: var(--space-md);
+      border-left: 3px solid var(--primary);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-xs);
+    }
+    .callout-positive {
+      border-left-color: var(--positive);
+    }
+    .callout-warning {
+      border-left-color: var(--warning);
+      background: var(--warning-bg);
+    }
+    .callout-error {
+      border-left-color: var(--error);
+      background: var(--error-bg);
+    }
+
+    /* Lesson list */
+    .lesson-nav-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-xs);
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-sm);
+      border-bottom: var(--rule);
+    }
+    .lesson-card {
+      background: var(--surface-container);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-lg);
+      border-left: 2px solid transparent;
+    }
+    .lesson-card.is-completed {
+      border-left-color: var(--positive);
+    }
+    .lesson-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+      gap: var(--space-lg);
+      align-items: start;
+    }
+    .formula-box {
+      background: var(--background);
+      border: var(--rule);
+      padding: var(--space-md);
+      font-family: var(--font-label);
+    }
+    .formula-main {
+      font-size: 1.125rem;
+      font-weight: 500;
+      color: var(--primary);
+      margin: var(--space-xs) 0;
+      overflow-x: auto;
+    }
+    .frac {
+      display: inline-flex;
+      flex-direction: column;
+      vertical-align: middle;
+      text-align: center;
+      font-size: 0.85em;
+      margin: 0 2px;
+    }
+    .frac > span:first-child {
+      border-bottom: 1px solid currentColor;
+      padding: 0 3px;
+    }
+    .frac > span:last-child {
+      padding: 0 3px;
+    }
+
+    /* Simulator Selector & Workbench */
+    .sim-selector {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(155px, 100%), 1fr));
+      gap: var(--space-xs);
+      margin-bottom: var(--space-lg);
+    }
+    .sim-btn {
+      background: var(--surface-container);
+      border: 0;
+      border-bottom: 2px solid transparent;
+      padding: var(--space-sm) var(--space-md);
+      min-height: 54px;
+      text-align: left;
+      cursor: pointer;
+      color: var(--on-surface);
+      font-family: var(--font-body);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-xs);
+      transition: background-color var(--dur-micro) var(--ease-out);
+    }
+    .sim-btn:hover {
+      background: var(--surface-container-high);
+    }
+    .sim-btn.is-active {
+      border-bottom: var(--indicator);
+      background: var(--surface-container-high);
+      font-weight: 600;
+    }
+
+    .canvas-stage {
+      background: var(--background);
+      border: var(--rule);
+      width: 100%;
+      min-height: 340px;
+      position: relative;
+      overflow: hidden;
+    }
+    .canvas-stage canvas {
+      display: block;
+      width: 100%;
+      height: 360px;
+      touch-action: none;
+    }
+
+    .readout-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(140px, 100%), 1fr));
+      gap: var(--space-sm);
+      margin-top: var(--space-md);
+    }
+    .readout-cell {
+      background: var(--surface-container);
+      padding: var(--space-sm) var(--space-md);
+    }
+    .readout-cell .val {
+      font-family: var(--font-label);
+      font-size: 1.25rem;
+      font-weight: 400;
+      margin-top: 2px;
+    }
+
+    .controls-stack {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-md);
+    }
+
+    .dual-input-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 96px;
+      gap: var(--space-sm);
+      align-items: center;
+    }
+
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: end;
+    }
+
+    /* Tables */
+    .data-table-wrap {
+      overflow-x: auto;
+      border: var(--rule);
+    }
+    table.carbon-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9375rem;
+    }
+    table.carbon-table thead th {
+      background: var(--surface-container-high);
+      font-family: var(--font-label);
+      font-size: var(--label-size);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--on-surface);
+      text-align: left;
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+    }
+    table.carbon-table tbody tr:nth-child(even) {
+      background: var(--surface-container);
+    }
+    table.carbon-table tbody td {
+      padding: var(--space-sm) var(--space-md);
+      border-bottom: var(--rule);
+      vertical-align: top;
+    }
+
+    /* Exercise cards */
+    .exercise-card {
+      background: var(--surface-container);
+      padding: var(--space-lg);
+      margin-bottom: var(--space-md);
+      border-left: 3px solid var(--outline);
+    }
+    .exercise-card.is-solved {
+      border-left-color: var(--positive);
+    }
+    .exercise-card.has-audit {
+      border-left-color: var(--warning);
+    }
+    .answer-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      align-items: end;
+      margin-top: var(--space-md);
+    }
+    .answer-row .field-group {
+      flex: 1 1 200px;
+      max-width: 280px;
+    }
+    .feedback-box {
+      margin-top: var(--space-md);
+    }
+    .step-list {
+      margin: var(--space-sm) 0 0 0;
+      padding-left: var(--space-lg);
+    }
+    .step-list li + li {
+      margin-top: var(--space-xs);
+    }
+
+    /* Footer */
+    .lab-footer {
+      border-top: var(--rule);
+      padding: var(--space-lg) 0;
+      color: var(--on-surface-variant);
+      font-size: 0.875rem;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 900px) {
+      .asymmetric-grid,
+      .lesson-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page-container {
+        padding: var(--space-sm) var(--space-md);
+      }
+      .nav-tab {
+        padding: var(--space-sm) var(--space-md);
+        font-size: 0.875rem;
+        flex: 1 1 auto;
+        justify-content: center;
+      }
+      .canvas-stage canvas {
+        height: 290px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
+
+  <header class="lab-header">
+    <div class="page-container">
+      <div class="header-top">
+        <div>
+          <span class="mono-label">Física Aplicada · Ingeniería Mecánica y Robótica</span>
+          <h1 class="headline-display">Laboratorio Virtual de <strong>Trabajo y Energía</strong></h1>
+        </div>
+        <div class="header-meta">
+          <div class="progress-pill-summary" aria-live="polite">
+            <span class="mono-label" style="display:inline;">Progreso</span>
+            <strong class="mono-num" id="header-progress-pct">0%</strong>
+          </div>
+          <button type="button" class="btn btn-ghost btn-sm" id="theme-toggle-btn" onclick="toggleTheme()" aria-label="Cambiar entre modo claro y modo oscuro">
+            <i data-lucide="moon" id="theme-icon" aria-hidden="true"></i>
+            <span id="theme-label">Modo Oscuro</span>
+          </button>
+        </div>
+      </div>
+
+      <nav class="primary-nav" role="tablist" aria-label="Módulos del laboratorio">
+        <button type="button" role="tab" class="nav-tab is-active" id="tab-inicio" aria-selected="true" aria-controls="view-inicio" onclick="switchView('inicio')">
+          <i data-lucide="layout-dashboard" aria-hidden="true"></i>
+          <span>Inicio y Progreso</span>
+        </button>
+        <button type="button" role="tab" class="nav-tab" id="tab-teoria" aria-selected="false" aria-controls="view-teoria" onclick="switchView('teoria')">
+          <i data-lucide="book-open" aria-hidden="true"></i>
+          <span>Lecciones Teóricas</span>
+        </button>
+        <button type="button" role="tab" class="nav-tab" id="tab-simuladores" aria-selected="false" aria-controls="view-simuladores" onclick="switchView('simuladores')">
+          <i data-lucide="sliders" aria-hidden="true"></i>
+          <span>7 Simuladores</span>
+        </button>
+        <button type="button" role="tab" class="nav-tab" id="tab-ejercicios" aria-selected="false" aria-controls="view-ejercicios" onclick="switchView('ejercicios')">
+          <i data-lucide="check-square" aria-hidden="true"></i>
+          <span>Banco de Ejercicios</span>
+        </button>
+        <button type="button" role="tab" class="nav-tab" id="tab-formulario" aria-selected="false" aria-controls="view-formulario" onclick="switchView('formulario')">
+          <i data-lucide="calculator" aria-hidden="true"></i>
+          <span>Formulario y Calculadora</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content" class="page-container">
+
+    <!-- ==================== VISTA 1: INICIO Y PROGRESO ==================== -->
+    <section id="view-inicio" class="view-panel is-active" role="tabpanel" aria-labelledby="tab-inicio">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Panel de Control Académico</span>
+          <h2 class="headline-section">Estado de aprendizaje y <strong>acceso modular</strong></h2>
+        </div>
+        <div class="btn-row">
+          <button type="button" class="btn btn-danger-ghost btn-sm" id="reset-progress-btn" onclick="handleResetProgress(this)">
+            <i data-lucide="rotate-ccw" aria-hidden="true"></i>
+            <span>Reiniciar progreso</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="kpi-grid">
+        <div class="kpi-tile is-lead">
+          <span class="mono-label">Avance global</span>
+          <div class="key-value" id="kpi-global-pct">0%</div>
+          <div class="progress-track" aria-hidden="true">
+            <div class="progress-fill" id="kpi-global-bar"></div>
+          </div>
+          <span class="mono-label" id="kpi-storage-note">Guardado automático en sesión de cuaderno</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="mono-label">Lecciones completadas</span>
+          <div class="key-value" id="kpi-lessons">0 / 6</div>
+          <span>Fundamentos de trabajo, potencia y energía</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="mono-label">Simuladores explorados</span>
+          <div class="key-value" id="kpi-sims">0 / 7</div>
+          <span>Modelos interactivos con DCL, gráficas y robótica</span>
+        </div>
+        <div class="kpi-tile">
+          <span class="mono-label">Ejercicios validados</span>
+          <div class="key-value" id="kpi-exercises">0 / 10</div>
+          <span>Incluye auditoría docente de signos y cotas</span>
+        </div>
+      </div>
+
+      <div id="onboarding-callout" class="callout" style="margin-bottom: var(--space-lg);">
+        <span class="mono-label">Inicio rápido</span>
+        <strong>Aún no has registrado actividad en esta sesión.</strong>
+        <p style="margin:0;">Comienza revisando las 6 lecciones teóricas, experimenta directamente con los 7 simuladores físicos o pon a prueba tu dominio en el banco de ejercicios con validación numérica en vivo.</p>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Arquitectura del laboratorio</span>
+          <h3 class="subhead">Acceso modular por competencia</h3>
+        </div>
+      </div>
+
+      <div class="card-grid">
+        <article class="layer card-wrapper">
+          <span class="mono-label">Módulo 01 · Teoría</span>
+          <h3 class="subhead" style="margin: var(--space-xs) 0;">Lecciones breves estructuradas</h3>
+          <p style="margin: 0 0 var(--space-md) 0; color: var(--on-surface-variant);">Desde el producto escalar F·d·cos θ hasta la disipación térmica por rozamiento en planos inclinados.</p>
+          <button type="button" class="btn btn-primary btn-sm" onclick="switchView('teoria')">Abrir 6 lecciones</button>
+        </article>
+
+        <article class="layer card-wrapper">
+          <span class="mono-label">Módulo 02 · Experimentación</span>
+          <h3 class="subhead" style="margin: var(--space-xs) 0;">7 Simuladores físicos en tiempo real</h3>
+          <p style="margin: 0 0 var(--space-md) 0; color: var(--on-surface-variant);">Vectores interactivos, DCL de robot móvil, áreas poligonales F(x), rampa energética, resortes y actuadores.</p>
+          <button type="button" class="btn btn-primary btn-sm" onclick="switchView('simuladores')">Explorar simuladores</button>
+        </article>
+
+        <article class="layer card-wrapper">
+          <span class="mono-label">Módulo 03 · Evaluación</span>
+          <h3 class="subhead" style="margin: var(--space-xs) 0;">Banco con auditoría docente</h3>
+          <p style="margin: 0 0 var(--space-md) 0; color: var(--on-surface-variant);">10 problemas de cálculo físico con admisión de coma o punto decimal, pistas progresivas y alertas de inconsistencias clásicas.</p>
+          <button type="button" class="btn btn-primary btn-sm" onclick="switchView('ejercicios')">Resolver ejercicios</button>
+        </article>
+
+        <article class="layer card-wrapper">
+          <span class="mono-label">Módulo 04 · Referencia</span>
+          <h3 class="subhead" style="margin: var(--space-xs) 0;">Formulario y calculadora de soporte</h3>
+          <p style="margin: 0 0 var(--space-md) 0; color: var(--on-surface-variant);">Resumen de ecuaciones del SI y calculadora en vivo de trabajo, energía mecánica, teorema ΔEm y conversión energética.</p>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="switchView('formulario')">Abrir herramientas</button>
+        </article>
+      </div>
+
+      <div style="margin-top: var(--space-xl);">
+        <div class="section-head">
+          <div>
+            <span class="mono-label">Acceso directo a los 7 simuladores</span>
+            <h3 class="subhead">Selecciona un banco de pruebas</h3>
+          </div>
+        </div>
+        <div class="card-grid" id="home-sim-cards"></div>
+      </div>
+    </section>
+
+    <!-- ==================== VISTA 2: LECCIONES TEÓRICAS ==================== -->
+    <section id="view-teoria" class="view-panel" role="tabpanel" aria-labelledby="tab-teoria">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Fundamentos Teóricos · 6 Unidades</span>
+          <h2 class="headline-section">Principios de <strong>Trabajo, Energía y Conservación</strong></h2>
+        </div>
+        <span class="tag" id="theory-progress-tag">0 de 6 completadas</span>
+      </div>
+
+      <div class="lesson-nav-bar" aria-label="Navegación rápida de lecciones">
+        <a href="#lec-1" class="btn btn-ghost btn-sm">01. Trabajo mecánico</a>
+        <a href="#lec-2" class="btn btn-ghost btn-sm">02. Trabajo neto</a>
+        <a href="#lec-3" class="btn btn-ghost btn-sm">03. Fuerza variable F(x)</a>
+        <a href="#lec-4" class="btn btn-ghost btn-sm">04. Energías mecánicas</a>
+        <a href="#lec-5" class="btn btn-ghost btn-sm">05. Conservación</a>
+        <a href="#lec-6" class="btn btn-ghost btn-sm">06. Fricción y ΔEm</a>
+      </div>
+
+      <div id="lessons-container"></div>
+    </section>
+
+    <!-- ==================== VISTA 3: SIETE SIMULADORES ==================== -->
+    <section id="view-simuladores" class="view-panel" role="tabpanel" aria-labelledby="tab-simuladores">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Banco Experimental Interactivo</span>
+          <h2 class="headline-section">Simuladores de <strong>Mecánica y Robótica</strong></h2>
+        </div>
+        <span class="tag" id="sim-explored-tag">0 de 7 explorados</span>
+      </div>
+
+      <div class="sim-selector" role="tablist" aria-label="Selector de simulador">
+        <button type="button" role="tab" class="sim-btn is-active" id="sim-tab-1" onclick="selectSim(1)">
+          <span class="mono-label">SIM 01</span>
+          <span>Fuerza y Ángulo θ</span>
+        </button>
+        <button type="button" role="tab" class="sim-btn" id="sim-tab-2" onclick="selectSim(2)">
+          <span class="mono-label">SIM 02</span>
+          <span>Trabajo Neto y DCL</span>
+        </button>
+        <button type="button" role="tab" class="sim-btn" id="sim-tab-3" onclick="selectSim(3)">
+          <span class="mono-label">SIM 03</span>
+          <span>Área bajo curva F(x)</span>
+        </button>
+        <button type="button" role="tab" class="sim-btn" id="sim-tab-4" onclick="selectSim(4)">
+          <span class="mono-label">SIM 04</span>
+          <span>Rampa y Conservación</span>
+        </button>
+        <button type="button" role="tab" class="sim-btn" id="sim-tab-5" onclick="selectSim(5)">
+          <span class="mono-label">SIM 05</span>
+          <span>Sistema Masa-Resorte</span>
+        </button>
+        <button type="button" role="tab" class="sim-btn" id="sim-tab-6" onclick="selectSim(6)">
+          <span class="mono-label">SIM 06</span>
+          <span>Fricción y Disipación</span>
+        </button>
+        <button type="button" role="tab" class="sim-btn" id="sim-tab-7" onclick="selectSim(7)">
+          <span class="mono-label">SIM 07</span>
+          <span>Robótica Aplicada</span>
+        </button>
+      </div>
+
+      <!-- Simulador 1 -->
+      <div id="sim-panel-1" class="sim-panel">
+        <div class="asymmetric-grid">
+          <div class="layer controls-stack">
+            <div>
+              <span class="mono-label">Simulador 01 · Fuerza Constante</span>
+              <h3 class="subhead">Fuerza, Desplazamiento y Ángulo θ</h3>
+              <p style="margin: var(--space-xs) 0 0 0; font-size:0.875rem; color: var(--on-surface-variant);">Arrastra el extremo del vector azul directamente sobre el lienzo o ajusta los parámetros.</p>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s1-force-num"><span>Fuerza F (N)</span></label>
+              <div class="dual-input-row">
+                <input type="range" id="s1-force-rng" min="0" max="100" step="1" value="40" oninput="s1SyncForceSlider(this.value)">
+                <input type="number" id="s1-force-num" class="input-box" min="0" max="100" step="1" value="40" oninput="s1SyncForceNum(this.value)">
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s1-dist-num"><span>Desplazamiento d (m)</span></label>
+              <div class="dual-input-row">
+                <input type="range" id="s1-dist-rng" min="1" max="25" step="0.5" value="10" oninput="s1SyncDistSlider(this.value)">
+                <input type="number" id="s1-dist-num" class="input-box" min="1" max="25" step="0.5" value="10" oninput="s1SyncDistNum(this.value)">
+              </div>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s1-angle-num"><span>Ángulo θ respecto a d (°)</span></label>
+              <div class="dual-input-row">
+                <input type="range" id="s1-angle-rng" min="0" max="180" step="1" value="37" oninput="s1SyncAngleSlider(this.value)">
+                <input type="number" id="s1-angle-num" class="input-box" min="0" max="180" step="1" value="37" oninput="s1SyncAngleNum(this.value)">
+              </div>
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-primary btn-sm" onclick="s1Animate()">Simular desplazamiento</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="s1Preset(20, 10, 0)">θ = 0° (Motor)</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="s1Preset(30, 10, 90)">θ = 90° (Nulo)</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="s1Preset(12, 15, 180)">θ = 180° (Resistente)</button>
+            </div>
+            <div id="s1-classification" class="callout callout-positive">
+              <span class="mono-label">Clasificación Dinámica</span>
+              <strong id="s1-class-title">Trabajo Motor (Positivo)</strong>
+              <span id="s1-class-desc">La componente Fx actúa a favor del desplazamiento.</span>
+            </div>
+          </div>
+          <div>
+            <div class="canvas-stage">
+              <canvas id="canvas-sim-1" aria-label="Simulador interactivo de fuerza, ángulo y desplazamiento"></canvas>
+            </div>
+            <div class="readout-strip">
+              <div class="readout-cell">
+                <span class="mono-label">Componente Fx</span>
+                <div class="val" id="s1-out-fx">31.95 N</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">Componente Fy</span>
+                <div class="val" id="s1-out-fy">24.07 N</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">cos(θ)</span>
+                <div class="val" id="s1-out-cos">0.799</div>
+              </div>
+              <div class="readout-cell" style="border-bottom: var(--indicator);">
+                <span class="mono-label">Trabajo W = F·d·cos θ</span>
+                <div class="val" id="s1-out-w">+319.5 J</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulador 2 -->
+      <div id="sim-panel-2" class="sim-panel" style="display:none;">
+        <div class="asymmetric-grid">
+          <div class="layer controls-stack">
+            <div>
+              <span class="mono-label">Simulador 02 · Superposición</span>
+              <h3 class="subhead">Trabajo Neto y DCL de Robot Móvil</h3>
+              <p style="margin: var(--space-xs) 0 0 0; font-size:0.875rem; color: var(--on-surface-variant);">Configura múltiples fuerzas sobre el chasis y observa el DCL dinámico.</p>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s2-f1"><span>F₁ Tracción motor (+X) [N]</span></label>
+              <input type="number" id="s2-f1" class="input-box" min="0" max="150" step="1" value="27" oninput="s2Update()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s2-f2"><span>F₂ Carga/arrastre (-X) [N]</span></label>
+              <input type="number" id="s2-f2" class="input-box" min="0" max="150" step="1" value="13" oninput="s2Update()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s2-f3"><span>F₃ Empuje auxiliar [N]</span></label>
+              <input type="number" id="s2-f3" class="input-box" min="0" max="100" step="1" value="10" oninput="s2Update()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s2-a3"><span>Ángulo θ₃ de F₃ [°]</span></label>
+              <input type="range" id="s2-a3" min="0" max="180" step="1" value="37" oninput="s2Update()">
+              <span class="mono-num" id="s2-a3-val" style="font-size:0.875rem;">37°</span>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s2-d"><span>Desplazamiento d (+X) [m]</span></label>
+              <input type="number" id="s2-d" class="input-box" min="1" max="60" step="1" value="20" oninput="s2Update()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s2-m"><span>Masa del robot m [kg]</span></label>
+              <input type="number" id="s2-m" class="input-box" min="1" max="100" step="1" value="12" oninput="s2Update()">
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-primary btn-sm" onclick="s2Animate()">Mover robot</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="s2PresetEj4()">Cargar Ej. 4 PPTX</button>
+            </div>
+          </div>
+          <div>
+            <div class="canvas-stage">
+              <canvas id="canvas-sim-2" aria-label="Simulador de trabajo neto multifuerza con diagrama de cuerpo libre"></canvas>
+            </div>
+            <div class="readout-strip">
+              <div class="readout-cell">
+                <span class="mono-label">W₁ (Motor)</span>
+                <div class="val" id="s2-out-w1">+540.0 J</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">W₂ (Arrastre)</span>
+                <div class="val" id="s2-out-w2">-260.0 J</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">W₃ (Auxiliar)</span>
+                <div class="val" id="s2-out-w3">+159.7 J</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">W(Fg) y W(N)</span>
+                <div class="val">0.0 J</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">Fuerza Resultante Fx</span>
+                <div class="val" id="s2-out-fr">+21.99 N</div>
+              </div>
+              <div class="readout-cell" style="border-bottom: var(--indicator);">
+                <span class="mono-label">W_neto = ΣWᵢ = F_R·d</span>
+                <div class="val" id="s2-out-wnet">+439.7 J</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulador 3 -->
+      <div id="sim-panel-3" class="sim-panel" style="display:none;">
+        <div class="asymmetric-grid">
+          <div class="layer controls-stack">
+            <div>
+              <span class="mono-label">Simulador 03 · Integración Gráfica</span>
+              <h3 class="subhead">Fuerza Variable F(x) y Áreas</h3>
+              <p style="margin: var(--space-xs) 0 0 0; font-size:0.875rem; color: var(--on-surface-variant);">Arrastra verticalmente los 5 nodos en la gráfica o ajusta las fuerzas nodales para integrar el área poligonal.</p>
+            </div>
+            <div id="s3-node-inputs" class="controls-stack" style="gap: var(--space-sm);"></div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-ghost btn-sm" onclick="s3LoadPreset('ej10')">Preset Ej. 10 (Triángulo)</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="s3LoadPreset('ej11')">Preset Ej. 11 (Tramos +/-)</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="s3LoadPreset('robot')">Preset Actuador</button>
+            </div>
+            <div class="layer-nested">
+              <span class="mono-label">Desglose por tramos</span>
+              <ul id="s3-segments-list" style="margin: var(--space-xs) 0 0 0; padding-left: var(--space-md); font-family: var(--font-label); font-size:0.8125rem;"></ul>
+            </div>
+          </div>
+          <div>
+            <div class="canvas-stage">
+              <canvas id="canvas-sim-3" aria-label="Gráfica interactiva Fuerza versus Posición con cálculo de áreas"></canvas>
+            </div>
+            <div class="readout-strip">
+              <div class="readout-cell">
+                <span class="mono-label">Área Positiva (+A)</span>
+                <div class="val" id="s3-out-pos">+47.50 J</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">Área Negativa (-A)</span>
+                <div class="val" id="s3-out-neg">-2.00 J</div>
+              </div>
+              <div class="readout-cell" style="border-bottom: var(--indicator);">
+                <span class="mono-label">Trabajo Total ∫F(x)dx</span>
+                <div class="val" id="s3-out-tot">+45.50 J</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulador 4 -->
+      <div id="sim-panel-4" class="sim-panel" style="display:none;">
+        <div class="asymmetric-grid">
+          <div class="layer controls-stack">
+            <div>
+              <span class="mono-label">Simulador 04 · Superficie Lisa</span>
+              <h3 class="subhead">Conservación de Energía en Rampa</h3>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s4-profile"><span>Perfil de trayectoria</span></label>
+              <select id="s4-profile" class="input-box" onchange="s4Reset()">
+                <option value="double">Doble colina (Ej. 7: hA=13m → hB=8m)</option>
+                <option value="parabola">Valle parabólico simétrico</option>
+                <option value="ramp">Descenso directo a plano</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s4-mass"><span>Masa m [kg]</span></label>
+              <input type="number" id="s4-mass" class="input-box" min="0.5" max="50" step="0.5" value="2" oninput="s4RecalcStatic()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s4-ha"><span>Altura inicial h₀ [m]</span></label>
+              <input type="range" id="s4-ha" min="4" max="20" step="0.5" value="13" oninput="s4RecalcStatic()">
+              <span class="mono-num" id="s4-ha-val" style="font-size:0.875rem;">13.0 m</span>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s4-va"><span>Rapidez inicial v₀ [m/s]</span></label>
+              <input type="range" id="s4-va" min="0" max="15" step="0.5" value="0" oninput="s4RecalcStatic()">
+              <span class="mono-num" id="s4-va-val" style="font-size:0.875rem;">0.0 m/s</span>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s4-g"><span>Gravedad g [m/s²]</span></label>
+              <select id="s4-g" class="input-box" onchange="s4RecalcStatic()">
+                <option value="10" selected>10.0 m/s² (Estándar clase)</option>
+                <option value="9.81">9.81 m/s² (Estándar SI)</option>
+              </select>
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-primary btn-sm" id="s4-play-btn" onclick="s4TogglePlay()">Reproducir</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="s4Reset()">Reiniciar</button>
+            </div>
+          </div>
+          <div>
+            <div class="canvas-stage">
+              <canvas id="canvas-sim-4" aria-label="Simulador de conservación de energía mecánica en rampa con barras y velocímetro"></canvas>
+            </div>
+            <div class="readout-strip">
+              <div class="readout-cell">
+                <span class="mono-label">Altura h(x)</span>
+                <div class="val" id="s4-out-h">13.00 m</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">Velocímetro v</span>
+                <div class="val" id="s4-out-v">0.00 m/s</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">E_cinética (Ec)</span>
+                <div class="val" id="s4-out-ec">0.0 J</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">E_potencial (Epg)</span>
+                <div class="val" id="s4-out-epg">260.0 J</div>
+              </div>
+              <div class="readout-cell" style="border-bottom: var(--indicator);">
+                <span class="mono-label">E_mecánica (Em)</span>
+                <div class="val" id="s4-out-em">260.0 J</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulador 5 -->
+      <div id="sim-panel-5" class="sim-panel" style="display:none;">
+        <div class="asymmetric-grid">
+          <div class="layer controls-stack">
+            <div>
+              <span class="mono-label">Simulador 05 · Elasticidad</span>
+              <h3 class="subhead">Sistema Masa–Resorte Horizontal y Vertical</h3>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s5-mode"><span>Orientación del resorte</span></label>
+              <select id="s5-mode" class="input-box" onchange="s5Reset()">
+                <option value="horizontal">Horizontal (sin cambio de h en compresión)</option>
+                <option value="vertical">Vertical (incluye descenso -Δx al comprimir)</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s5-m"><span>Masa m [kg]</span></label>
+              <input type="number" id="s5-m" class="input-box" min="0.5" max="20" step="0.5" value="2" oninput="s5Reset()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s5-k"><span>Rigidez k [N/m]</span></label>
+              <input type="range" id="s5-k" min="50" max="1000" step="10" value="250" oninput="s5Reset()">
+              <span class="mono-num" id="s5-k-val" style="font-size:0.875rem;">250 N/m</span>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s5-v0"><span>Rapidez de impacto / inicial v₀ [m/s]</span></label>
+              <input type="range" id="s5-v0" min="0" max="15" step="0.5" value="11.18" oninput="s5Reset()">
+              <span class="mono-num" id="s5-v0-val" style="font-size:0.875rem;">11.18 m/s</span>
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-primary btn-sm" id="s5-play-btn" onclick="s5TogglePlay()">Soltar / Impulsar</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="s5Reset()">Reiniciar</button>
+            </div>
+            <div class="callout callout-warning">
+              <span class="mono-label">Comparación de cotas</span>
+              <span id="s5-cota-note" style="font-size:0.875rem;">En modo horizontal Δh = 0 durante la compresión. Cambia a vertical para ver cómo mgΔx incrementa la deformación máxima.</span>
+            </div>
+          </div>
+          <div>
+            <div class="canvas-stage">
+              <canvas id="canvas-sim-5" aria-label="Simulador de sistema masa-resorte horizontal y vertical"></canvas>
+            </div>
+            <div class="readout-strip">
+              <div class="readout-cell">
+                <span class="mono-label">Deformación actual Δx</span>
+                <div class="val" id="s5-out-x">0.000 m</div>
+              </div>
+              <div class="readout-cell" style="border-bottom: var(--indicator);">
+                <span class="mono-label">Compresión máxima Δx_max</span>
+                <div class="val" id="s5-out-xmax">1.000 m</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">E_cinética (Ec)</span>
+                <div class="val" id="s5-out-ec">125.0 J</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">E_elástica (Epe)</span>
+                <div class="val" id="s5-out-epe">0.0 J</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">E_mecánica Total</span>
+                <div class="val" id="s5-out-em">125.0 J</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulador 6 -->
+      <div id="sim-panel-6" class="sim-panel" style="display:none;">
+        <div class="asymmetric-grid">
+          <div class="layer controls-stack">
+            <div>
+              <span class="mono-label">Simulador 06 · Fuerzas No Conservativas</span>
+              <h3 class="subhead">Fricción, Calor Disipado y Distancia de Detención</h3>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s6-m"><span>Masa del bloque m [kg]</span></label>
+              <input type="number" id="s6-m" class="input-box" min="1" max="50" step="0.5" value="4" oninput="s6Reset()">
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s6-h"><span>Altura inicial de rampa lisa h [m]</span></label>
+              <input type="range" id="s6-h" min="1" max="15" step="0.5" value="5" oninput="s6Reset()">
+              <span class="mono-num" id="s6-h-val" style="font-size:0.875rem;">5.0 m</span>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s6-angle"><span>Inclinación de rampa α [°]</span></label>
+              <input type="range" id="s6-angle" min="15" max="60" step="1" value="37" oninput="s6Reset()">
+              <span class="mono-num" id="s6-angle-val" style="font-size:0.875rem;">37°</span>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s6-mu"><span>Coef. fricción en plano rugoso μ_k</span></label>
+              <input type="range" id="s6-mu" min="0.05" max="0.80" step="0.01" value="0.25" oninput="s6Reset()">
+              <span class="mono-num" id="s6-mu-val" style="font-size:0.875rem;">0.25</span>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s6-ramp-friction"><span>¿Rampa también rugosa?</span></label>
+              <select id="s6-ramp-friction" class="input-box" onchange="s6Reset()">
+                <option value="no" selected>Rampa lisa, solo plano horizontal rugoso</option>
+                <option value="yes">Toda la trayectoria rugosa (con μ_k)</option>
+              </select>
+            </div>
+            <div class="btn-row">
+              <button type="button" class="btn btn-primary btn-sm" id="s6-play-btn" onclick="s6TogglePlay()">Soltar bloque</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="s6Reset()">Reiniciar</button>
+            </div>
+          </div>
+          <div>
+            <div class="canvas-stage">
+              <canvas id="canvas-sim-6" aria-label="Simulador de fricción, energía térmica disipada y distancia de detención"></canvas>
+            </div>
+            <div class="readout-strip">
+              <div class="readout-cell">
+                <span class="mono-label">E_m inicial</span>
+                <div class="val" id="s6-out-emi">200.0 J</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label">E_m actual</span>
+                <div class="val" id="s6-out-em">200.0 J</div>
+              </div>
+              <div class="readout-cell" style="border-bottom: 2px solid var(--error);">
+                <span class="mono-label">Calor disipado |W_fk|</span>
+                <div class="val" id="s6-out-heat">0.0 J</div>
+              </div>
+              <div class="readout-cell" style="border-bottom: var(--indicator);">
+                <span class="mono-label">Distancia de detención</span>
+                <div class="val" id="s6-out-dstop">20.00 m</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Simulador 7 -->
+      <div id="sim-panel-7" class="sim-panel" style="display:none;">
+        <div class="asymmetric-grid">
+          <div class="layer controls-stack">
+            <div>
+              <span class="mono-label">Simulador 07 · Ingeniería Robótica</span>
+              <h3 class="subhead">Actuadores, AGV y Compensación Pasiva</h3>
+            </div>
+            <div class="field-group">
+              <label class="field-label" for="s7-submode"><span>Sistema robótico a simular</span></label>
+              <select id="s7-submode" class="input-box" onchange="s7SwitchSubmode()">
+                <option value="actuator">1. Actuador lineal con carga inclinada</option>
+                <option value="agv">2. AGV móvil con resistencia a la rodadura</option>
+                <option value="arm">3. Brazo robótico con resorte compensador</option>
+              </select>
+            </div>
+
+            <!-- Submode 1: Actuator -->
+            <div id="s7-ctrl-actuator" class="controls-stack">
+              <div class="field-group">
+                <label class="field-label" for="s7a-f"><span>Fuerza axial del husillo F_act [N]</span></label>
+                <input type="range" id="s7a-f" min="20" max="400" step="5" value="180" oninput="s7Update()">
+                <span class="mono-num" id="s7a-f-val">180 N</span>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="s7a-d"><span>Carrera del actuador d [m]</span></label>
+                <input type="range" id="s7a-d" min="0.1" max="1.5" step="0.05" value="0.6" oninput="s7Update()">
+                <span class="mono-num" id="s7a-d-val">0.60 m</span>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="s7a-m"><span>Masa de carga útil m [kg]</span></label>
+                <input type="number" id="s7a-m" class="input-box" min="1" max="50" step="1" value="10" oninput="s7Update()">
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="s7a-ang"><span>Ángulo de inclinación β [°]</span></label>
+                <input type="range" id="s7a-ang" min="0" max="90" step="1" value="30" oninput="s7Update()">
+                <span class="mono-num" id="s7a-ang-val">30°</span>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="s7a-t"><span>Tiempo de ciclo Δt [s]</span></label>
+                <input type="number" id="s7a-t" class="input-box" min="0.5" max="20" step="0.5" value="2" oninput="s7Update()">
+              </div>
+            </div>
+
+            <!-- Submode 2: AGV -->
+            <div id="s7-ctrl-agv" class="controls-stack" style="display:none;">
+              <div class="field-group">
+                <label class="field-label" for="s7b-m"><span>Masa total AGV + pallet [kg]</span></label>
+                <input type="number" id="s7b-m" class="input-box" min="50" max="1500" step="10" value="320" oninput="s7Update()">
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="s7b-crr"><span>Coef. resistencia a la rodadura C_rr</span></label>
+                <input type="range" id="s7b-crr" min="0.005" max="0.06" step="0.001" value="0.018" oninput="s7Update()">
+                <span class="mono-num" id="s7b-crr-val">0.018</span>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="s7b-slope"><span>Pendiente de rampa logística [°]</span></label>
+                <input type="range" id="s7b-slope" min="0" max="15" step="0.5" value="4" oninput="s7Update()">
+                <span class="mono-num" id="s7b-slope-val">4.0°</span>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="s7b-d"><span>Distancia de ruta [m]</span></label>
+                <input type="number" id="s7b-d" class="input-box" min="5" max="500" step="5" value="80" oninput="s7Update()">
+              </div>
+            </div>
+
+            <!-- Submode 3: Arm -->
+            <div id="s7-ctrl-arm" class="controls-stack" style="display:none;">
+              <div class="field-group">
+                <label class="field-label" for="s7c-m"><span>Masa en el efector final [kg]</span></label>
+                <input type="number" id="s7c-m" class="input-box" min="1" max="30" step="0.5" value="5" oninput="s7Update()">
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="s7c-L"><span>Longitud de eslabón L [m]</span></label>
+                <input type="range" id="s7c-L" min="0.4" max="1.6" step="0.05" value="1.0" oninput="s7Update()">
+                <span class="mono-num" id="s7c-L-val">1.00 m</span>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="s7c-theta"><span>Ángulo del brazo θ (0°=arriba) [°]</span></label>
+                <input type="range" id="s7c-theta" min="0" max="120" step="1" value="60" oninput="s7Update()">
+                <span class="mono-num" id="s7c-theta-val">60°</span>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="s7c-k"><span>Rigidez del resorte compensador k [N/m]</span></label>
+                <input type="range" id="s7c-k" min="0" max="800" step="10" value="350" oninput="s7Update()">
+                <span class="mono-num" id="s7c-k-val">350 N/m</span>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="canvas-stage">
+              <canvas id="canvas-sim-7" aria-label="Simulador de aplicaciones en robótica e ingeniería mecánica"></canvas>
+            </div>
+            <div class="readout-strip" id="s7-readouts">
+              <div class="readout-cell">
+                <span class="mono-label" id="s7-l1">Trabajo actuador</span>
+                <div class="val" id="s7-v1">+108.0 J</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label" id="s7-l2">ΔE_pg carga</span>
+                <div class="val" id="s7-v2">+29.4 J</div>
+              </div>
+              <div class="readout-cell">
+                <span class="mono-label" id="s7-l3">E_cinética ganada</span>
+                <div class="val" id="s7-v3">+78.6 J</div>
+              </div>
+              <div class="readout-cell" style="border-bottom: var(--indicator);">
+                <span class="mono-label" id="s7-l4">Potencia mecánica</span>
+                <div class="val" id="s7-v4">54.0 W</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VISTA 4: BANCO DE EJERCICIOS ==================== -->
+    <section id="view-ejercicios" class="view-panel" role="tabpanel" aria-labelledby="tab-ejercicios">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Evaluación Formativa · Tolerancia Numérica ±1.5%</span>
+          <h2 class="headline-section">Banco de Ejercicios y <strong>Auditoría Docente</strong></h2>
+        </div>
+        <span class="tag tag-positive" id="ex-score-tag">0 de 10 correctos</span>
+      </div>
+
+      <div class="callout callout-warning" style="margin-bottom: var(--space-lg);">
+        <span class="mono-label">Nota de validación física</span>
+        <strong>Admisión de formato decimal y rigor de signos:</strong>
+        <p style="margin:0;">Puedes ingresar punto (<code>45.5</code>) o coma decimal (<code>45,5</code>). Presta especial atención al signo (<code>+</code> o <code>-</code>) del trabajo: los ejercicios marcados con <strong>Auditoría Docente</strong> señalan inconsistencias clásicas de solucionarios respecto al rigor físico.</p>
+      </div>
+
+      <div class="btn-row" style="margin-bottom: var(--space-lg);" role="group" aria-label="Filtrar ejercicios por categoría">
+        <button type="button" class="btn btn-primary btn-sm ex-filter-btn" data-cat="all" onclick="filterExercises('all', this)">Todos (10)</button>
+        <button type="button" class="btn btn-ghost btn-sm ex-filter-btn" data-cat="trabajo" onclick="filterExercises('trabajo', this)">Trabajo Mecánico</button>
+        <button type="button" class="btn btn-ghost btn-sm ex-filter-btn" data-cat="variable" onclick="filterExercises('variable', this)">Fuerza Variable</button>
+        <button type="button" class="btn btn-ghost btn-sm ex-filter-btn" data-cat="energia" onclick="filterExercises('energia', this)">Energía y Conservación</button>
+        <button type="button" class="btn btn-ghost btn-sm ex-filter-btn" data-cat="auditoria" onclick="filterExercises('auditoria', this)">Auditoría Docente</button>
+      </div>
+
+      <div id="exercises-container"></div>
+    </section>
+
+    <!-- ==================== VISTA 5: FORMULARIO Y CALCULADORA ==================== -->
+    <section id="view-formulario" class="view-panel" role="tabpanel" aria-labelledby="tab-formulario">
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Referencia Técnica y Cómputo</span>
+          <h2 class="headline-section">Formulario SI y <strong>Calculadora Interactiva</strong></h2>
+        </div>
+      </div>
+
+      <div class="asymmetric-grid" style="margin-bottom: var(--space-xl);">
+        <div class="layer controls-stack">
+          <div>
+            <span class="mono-label">Calculadora Multifunción en Vivo</span>
+            <h3 class="subhead">Cómputo paso a paso</h3>
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="calc-mode"><span>Módulo de cálculo</span></label>
+            <select id="calc-mode" class="input-box" onchange="switchCalcMode()">
+              <option value="work">1. Trabajo Mecánico (W = F·d·cos θ)</option>
+              <option value="energy">2. Energía Mecánica Total (Ec + Epg + Epe)</option>
+              <option value="theorem">3. Teorema Trabajo–Energía (W_fnc = ΔEm)</option>
+              <option value="convert">4. Conversor Energético (J, kJ, Wh, kcal)</option>
+            </select>
+          </div>
+
+          <div id="calc-inputs-area" class="controls-stack"></div>
+
+          <div class="btn-row">
+            <button type="button" class="btn btn-ghost btn-sm" onclick="calcLoadPreset()">Cargar ejemplo de referencia</button>
+          </div>
+        </div>
+
+        <div>
+          <div class="kpi-tile is-lead" style="margin-bottom: var(--space-md);">
+            <span class="mono-label" id="calc-res-label">Resultado Principal</span>
+            <div class="key-value" id="calc-res-value">+0.00 J</div>
+            <span id="calc-res-note" style="color: var(--on-surface-variant);">Modifica cualquier parámetro para recalcular en tiempo real.</span>
+          </div>
+          <div class="layer">
+            <span class="mono-label">Desglose de cálculo intermedio</span>
+            <div id="calc-steps" style="margin-top: var(--space-sm); font-family: var(--font-label); font-size: 0.9rem; line-height: 1.7;"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div>
+          <span class="mono-label">Síntesis de Ecuaciones</span>
+          <h3 class="subhead">Formulario de Referencia Rápida (Sistema Internacional)</h3>
+        </div>
+      </div>
+
+      <div class="data-table-wrap">
+        <table class="carbon-table">
+          <thead>
+            <tr>
+              <th>Concepto</th>
+              <th>Ecuación Fundamental</th>
+              <th>Unidades SI</th>
+              <th>Criterio Físico / Signo</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Trabajo de fuerza constante</strong></td>
+              <td class="mono-num">W = F · d · cos(θ)</td>
+              <td class="mono-num">J (N·m)</td>
+              <td>Motor (+) si 0° ≤ θ &lt; 90°; Nulo (0) si θ = 90°; Resistente (−) si 90° &lt; θ ≤ 180°.</td>
+            </tr>
+            <tr>
+              <td><strong>Trabajo neto (superposición)</strong></td>
+              <td class="mono-num">W_neto = Σ Wᵢ = F_R · d · cos(θ_R)</td>
+              <td class="mono-num">J</td>
+              <td>Equivalente al trabajo de la fuerza resultante sobre la trayectoria.</td>
+            </tr>
+            <tr>
+              <td><strong>Trabajo de fuerza variable</strong></td>
+              <td class="mono-num">W = ∫ F(x) dx = Σ A(+) − Σ A(−)</td>
+              <td class="mono-num">J</td>
+              <td>Área bajo la curva F vs x. Áreas debajo del eje x aportan trabajo negativo.</td>
+            </tr>
+            <tr>
+              <td><strong>Energía cinética traslacional</strong></td>
+              <td class="mono-num">Ec = ½ · m · v²</td>
+              <td class="mono-num">J</td>
+              <td>Siempre ≥ 0. Depende del sistema de referencia elegido.</td>
+            </tr>
+            <tr>
+              <td><strong>Energía potencial gravitatoria</strong></td>
+              <td class="mono-num">Epg = m · g · h</td>
+              <td class="mono-num">J</td>
+              <td>Positiva sobre el Nivel de Referencia (N.R.), negativa bajo el N.R.</td>
+            </tr>
+            <tr>
+              <td><strong>Energía potencial elástica</strong></td>
+              <td class="mono-num">Epe = ½ · k · (Δx)²</td>
+              <td class="mono-num">J</td>
+              <td>Siempre ≥ 0 tanto en compresión como en estiramiento. k en N/m.</td>
+            </tr>
+            <tr>
+              <td><strong>Conservación de E. Mecánica</strong></td>
+              <td class="mono-num">Em_A = Em_B  (si W_fnc = 0)</td>
+              <td class="mono-num">J</td>
+              <td>Válido en superficies lisas sin fuerzas externas activas ni fricción.</td>
+            </tr>
+            <tr>
+              <td><strong>Teorema Trabajo–Energía Mec.</strong></td>
+              <td class="mono-num">W_fnc = Em_f − Em_i = ΔEm</td>
+              <td class="mono-num">J</td>
+              <td>W_fk = −f_k · d siempre es negativo (disipación térmica).</td>
+            </tr>
+            <tr>
+              <td><strong>Potencia mecánica media</strong></td>
+              <td class="mono-num">P = W / Δt = F · v · cos(θ)</td>
+              <td class="mono-num">W (J/s)</td>
+              <td>Tasa de transferencia energética en actuadores y transmisiones.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="lab-footer">
+    <div class="page-container">
+      <span>Fuentes base: Material de Física — Trabajo Mecánico y Energía Mecánica (Ciclo Regular), adaptado con enfoque analítico para Ingeniería Mecánica y Robótica.</span>
+    </div>
+  </footer>
+
+  <api-shim></api-shim>
+
+  <script>
+    /* =====================================================================
+       STATE & PERSISTENCE (notebookAppApi)
+       ===================================================================== */
+    const DEFAULT_STATE = {
+      theme: `light`,
+      activeView: `inicio`,
+      activeSim: 1,
+      completedLessons: [],
+      exploredSims: [1],
+      solvedExercises: []
+    };
+
+    let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    let animFrames = { s1: null, s2: null, s4: null, s5: null, s6: null };
+
+    async function loadAppState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.getAppState === `function`) {
+          const saved = await window.notebookAppApi.getAppState();
+          if (saved && typeof saved === `object`) {
+            appState = {
+              theme: saved.theme === `dark` ? `dark` : `light`,
+              activeView: typeof saved.activeView === `string` ? saved.activeView : `inicio`,
+              activeSim: Number(saved.activeSim) >= 1 && Number(saved.activeSim) <= 7 ? Number(saved.activeSim) : 1,
+              completedLessons: Array.isArray(saved.completedLessons) ? saved.completedLessons : [],
+              exploredSims: Array.isArray(saved.exploredSims) && saved.exploredSims.length ? saved.exploredSims : [1],
+              solvedExercises: Array.isArray(saved.solvedExercises) ? saved.solvedExercises : []
+            };
+          }
+        }
+      } catch (e) {
+        /* Fallback silencioso a estado por defecto en memoria */
+      }
+    }
+
+    async function saveAppState() {
+      try {
+        if (window.notebookAppApi && typeof window.notebookAppApi.setAppState === `function`) {
+          await window.notebookAppApi.setAppState(appState);
+        }
+      } catch (e) {
+        /* Ignorar en entorno sin host */
+      }
+    }
+
+    function getThemeColors() {
+      const cs = getComputedStyle(document.documentElement);
+      const val = (name) => cs.getPropertyValue(name).trim();
+      return {
+        bg: val(`--background`),
+        surface: val(`--surface-container`),
+        surfaceHigh: val(`--surface-container-high`),
+        ink: val(`--on-surface`),
+        inkVar: val(`--on-surface-variant`),
+        outline: val(`--outline`),
+        rule: val(`--outline-variant`),
+        primary: val(`--primary`),
+        primarySoft: val(`--primary-container`),
+        positive: val(`--positive`),
+        positiveBg: val(`--positive-bg`),
+        warning: val(`--warning`),
+        error: val(`--error`),
+        errorBg: val(`--error-bg`),
+        d2: val(`--data-2`),
+        d3: val(`--data-3`),
+        d4: val(`--data-4`)
+      };
+    }
+
+    function applyTheme() {
+      document.documentElement.setAttribute(`data-theme`, appState.theme);
+      const label = document.getElementById(`theme-label`);
+      const icon = document.getElementById(`theme-icon`);
+      if (label) label.textContent = appState.theme === `dark` ? `Modo Claro` : `Modo Oscuro`;
+      if (icon) {
+        icon.setAttribute(`data-lucide`, appState.theme === `dark` ? `sun` : `moon`);
+      }
+      if (window.lucide && typeof window.lucide.createIcons === `function`) {
+        window.lucide.createIcons();
+      }
+      redrawActiveSim();
+    }
+
+    function toggleTheme() {
+      appState.theme = appState.theme === `dark` ? `light` : `dark`;
+      applyTheme();
+      saveAppState();
+    }
+
+    /* =====================================================================
+       NAVIGATION & PROGRESS
+       ===================================================================== */
+    function switchView(viewName) {
+      const valid = [`inicio`, `teoria`, `simuladores`, `ejercicios`, `formulario`];
+      if (!valid.includes(viewName)) viewName = `inicio`;
+      appState.activeView = viewName;
+
+      valid.forEach((v) => {
+        const panel = document.getElementById(`view-${v}`);
+        const tab = document.getElementById(`tab-${v}`);
+        const active = v === viewName;
+        if (panel) panel.classList.toggle(`is-active`, active);
+        if (tab) {
+          tab.classList.toggle(`is-active`, active);
+          tab.setAttribute(`aria-selected`, active ? `true` : `false`);
+        }
+      });
+
+      if (viewName === `simuladores`) {
+        setTimeout(() => {
+          selectSim(appState.activeSim, true);
+        }, 20);
+      }
+      saveAppState();
+    }
+
+    function updateProgressUI() {
+      const lCount = appState.completedLessons.length;
+      const sCount = appState.exploredSims.length;
+      const eCount = appState.solvedExercises.length;
+      const totalItems = 6 + 7 + 10;
+      const doneItems = lCount + sCount + eCount;
+      const pct = Math.round((doneItems / totalItems) * 100);
+
+      const elHeaderPct = document.getElementById(`header-progress-pct`);
+      const elKpiPct = document.getElementById(`kpi-global-pct`);
+      const elKpiBar = document.getElementById(`kpi-global-bar`);
+      const elKpiL = document.getElementById(`kpi-lessons`);
+      const elKpiS = document.getElementById(`kpi-sims`);
+      const elKpiE = document.getElementById(`kpi-exercises`);
+      const elTheoryTag = document.getElementById(`theory-progress-tag`);
+      const elSimTag = document.getElementById(`sim-explored-tag`);
+      const elExTag = document.getElementById(`ex-score-tag`);
+      const elOnboarding = document.getElementById(`onboarding-callout`);
+
+      if (elHeaderPct) elHeaderPct.textContent = `${pct}%`;
+      if (elKpiPct) elKpiPct.textContent = `${pct}%`;
+      if (elKpiBar) elKpiBar.style.width = `${pct}%`;
+      if (elKpiL) elKpiL.textContent = `${lCount} / 6`;
+      if (elKpiS) elKpiS.textContent = `${sCount} / 7`;
+      if (elKpiE) elKpiE.textContent = `${eCount} / 10`;
+      if (elTheoryTag) elTheoryTag.textContent = `${lCount} de 6 completadas`;
+      if (elSimTag) elSimTag.textContent = `${sCount} de 7 explorados`;
+      if (elExTag) elExTag.textContent = `${eCount} de 10 correctos`;
+
+      if (elOnboarding) {
+        elOnboarding.style.display = (lCount === 0 && eCount === 0 && sCount <= 1) ? `flex` : `none`;
+      }
+    }
+
+    function handleResetProgress(btn) {
+      if (!btn) return;
+      if (btn.dataset.armed !== `true`) {
+        btn.dataset.armed = `true`;
+        const span = btn.querySelector(`span`);
+        if (span) span.textContent = `Confirmar reinicio`;
+        setTimeout(() => {
+          if (btn.dataset.armed === `true`) {
+            btn.dataset.armed = `false`;
+            if (span) span.textContent = `Reiniciar progreso`;
+          }
+        }, 4000);
+        return;
+      }
+      btn.dataset.armed = `false`;
+      const span = btn.querySelector(`span`);
+      if (span) span.textContent = `Reiniciar progreso`;
+
+      appState.completedLessons = [];
+      appState.exploredSims = [appState.activeSim];
+      appState.solvedExercises = [];
+      renderLessons();
+      renderExercises(currentExerciseFilter);
+      updateProgressUI();
+      saveAppState();
+    }
+
+    /* =====================================================================
+       HOME SIMULATOR CARDS
+       ===================================================================== */
+    const SIM_CATALOG = [
+      { id: 1, tag: `SIM 01`, title: `Fuerza, desplazamiento y ángulo θ`, desc: `Descomposición Fx / Fy y trabajo motor, resistente o nulo.` },
+      { id: 2, tag: `SIM 02`, title: `Trabajo neto con DCL dinámico`, desc: `Superposición de fuerzas sobre un robot móvil y fuerza resultante.` },
+      { id: 3, tag: `SIM 03`, title: `Fuerza variable e integral gráfica`, desc: `Nodos arrastrables en curva F(x) con suma de áreas positivas y negativas.` },
+      { id: 4, tag: `SIM 04`, title: `Conservación en rampa lisa`, desc: `Barras en tiempo real de Ec, Epg, Em y velocímetro instantáneo.` },
+      { id: 5, tag: `SIM 05`, title: `Sistema masa–resorte (H y V)`, desc: `Rigidez k, compresión máxima y corrección de altura vertical.` },
+      { id: 6, tag: `SIM 06`, title: `Fricción y disipación térmica`, desc: `Pérdida de energía mecánica en calor y distancia de detención.` },
+      { id: 7, tag: `SIM 07`, title: `Robótica e Ingeniería Mecánica`, desc: `Actuador lineal, AGV con rodadura y brazo con resorte compensador.` }
+    ];
+
+    function renderHomeSimCards() {
+      const container = document.getElementById(`home-sim-cards`);
+      if (!container) return;
+      container.innerHTML = SIM_CATALOG.map((s) => `
+        <article class="layer card-wrapper" style="display:flex; flex-direction:column; justify-content:space-between; gap: var(--space-sm);">
+          <div>
+            <span class="mono-label">${s.tag}</span>
+            <h4 class="subhead" style="margin: var(--space-xs) 0;">${s.title}</h4>
+            <p style="margin:0; font-size:0.875rem; color:var(--on-surface-variant);">${s.desc}</p>
+          </div>
+          <button type="button" class="btn btn-secondary btn-sm" onclick="jumpToSim(${s.id})">Abrir ${s.tag}</button>
+        </article>
+      `).join(``);
+    }
+
+    function jumpToSim(simId) {
+      appState.activeSim = simId;
+      switchView(`simuladores`);
+      selectSim(simId, false);
+    }
+
+    /* =====================================================================
+       THEORY LESSONS (6 UNITS)
+       ===================================================================== */
+    const LESSONS_DATA = [
+      {
+        id: `lec-1`,
+        num: `01`,
+        simId: 1,
+        title: `Trabajo mecánico de una fuerza constante`,
+        summary: `El trabajo mide la energía transferida a un cuerpo cuando una fuerza produce un desplazamiento a lo largo de su línea de acción.`,
+        body: `En ingeniería mecánica y robótica, solo la componente de la fuerza paralela al desplazamiento realiza trabajo mecánico. Si la fuerza es constante en magnitud y dirección sobre una trayectoria rectilínea de longitud d, el trabajo es el producto escalar W = F · d · cos(θ).`,
+        formulaTitle: `Definición y casos especiales`,
+        formulaHtml: `W<sub>AB</sub><sup>F</sup> = F · d · cos(θ)<br><span style="font-size:0.85rem; color:var(--on-surface-variant);">• θ = 0° (a favor): W = +F·d (Trabajo Motor)<br>• θ = 180° (en contra): W = −F·d (Trabajo Resistente)<br>• θ = 90° (perpendicular): W = 0 J (Trabajo Nulo)</span>`,
+        engineeringNote: `En robots móviles sobre pisos planos, el peso (Fg) y la fuerza normal (N) son perpendiculares al desplazamiento horizontal: no realizan trabajo.`
+      },
+      {
+        id: `lec-2`,
+        num: `02`,
+        simId: 2,
+        title: `Trabajo neto y principio de superposición`,
+        summary: `Cuando actúan múltiples fuerzas simultáneas, el trabajo neto puede obtenerse sumando cada trabajo individual o calculando el trabajo de la fuerza resultante.`,
+        body: `Por linealidad del producto escalar, el trabajo total desarrollado sobre un cuerpo rígido (tratado como partícula en traslación) es invariante al método de agrupación: sumar trabajos individuales con su signo coincide exactamente con proyectar la fuerza resultante F_R sobre el desplazamiento.`,
+        formulaTitle: `Equivalencia vectorial y escalar`,
+        formulaHtml: `W<sub>neto</sub> = W<sub>1</sub> + W<sub>2</sub> + … + W<sub>n</sub> = F<sub>R</sub> · d · cos(θ<sub>R</sub>)`,
+        engineeringNote: `Un W_neto > 0 indica incremento de energía cinética (aceleración); W_neto < 0 indica frenado; W_neto = 0 corresponde a rapidez constante.`
+      },
+      {
+        id: `lec-3`,
+        num: `03`,
+        simId: 3,
+        title: `Fuerza variable e integración gráfica F(x)`,
+        summary: `Cuando la fuerza cambia con la posición, el trabajo equivale al área neta bajo la curva Fuerza vs. Posición.`,
+        body: `En actuadores, resortes y levas, la fuerza depende de la posición x. Dividiendo la trayectoria en desplazamientos infinitesimales dx, el trabajo total es la integral definida ∫ F(x) dx. Gráficamente, las áreas por encima del eje x (F > 0) suman trabajo positivo y las áreas por debajo (F < 0) restan trabajo.`,
+        formulaTitle: `Área bajo la curva F–x`,
+        formulaHtml: `W<sub>AB</sub><sup>F(x)</sup> = ∫<sub>xᵢ</sub><sup>xf</sup> F(x) dx = A<sub>1</sub>(+) + A<sub>2</sub>(+) − A<sub>neg</sub>(−)`,
+        engineeringNote: `Para perfiles lineales por tramos, descompón la gráfica en rectángulos (b·h), triángulos (b·h/2) y trapecios ((B+b)·h/2).`
+      },
+      {
+        id: `lec-4`,
+        num: `04`,
+        simId: 5,
+        title: `Formas de energía mecánica (Ec, Epg, Epe)`,
+        summary: `La energía mecánica total agrupa la capacidad de realizar trabajo por movimiento, posición en campo gravitatorio y deformación elástica.`,
+        body: `En un instante dado, la energía mecánica de un sistema masa–resorte en el campo gravitatorio terrestre es la suma escalar de tres términos medidos en Joules (J). La energía cinética depende de la rapidez (relativa al marco de referencia), la potencial gravitatoria de la altura h respecto a un Nivel de Referencia (N.R.) arbitrario, y la elástica de la deformación Δx respecto a la longitud natural.`,
+        formulaTitle: `Componentes de la Energía Mecánica`,
+        formulaHtml: `E<sub>m</sub> = E<sub>c</sub> + E<sub>pg</sub> + E<sub>pe</sub> = <span class="frac"><span>1</span><span>2</span></span> m v² + m g h + <span class="frac"><span>1</span><span>2</span></span> k (Δx)²`,
+        engineeringNote: `Tanto al comprimir como al estirar un resorte ideal, (Δx)² > 0, por lo que Epe es siempre no negativa.`
+      },
+      {
+        id: `lec-5`,
+        num: `05`,
+        simId: 4,
+        title: `Conservación de la energía mecánica`,
+        summary: `Cuando solo actúan fuerzas conservativas (gravedad y fuerza elástica), la energía mecánica permanece constante a lo largo de toda la trayectoria.`,
+        body: `En superficies lisas (sin fricción) y sin actuadores externos que inyecten o extraigan energía, la suma Ec + Epg + Epe en cualquier punto A es idéntica a la de cualquier otro punto B, sin importar la forma curva o recta de la guía.`,
+        formulaTitle: `Teorema de Conservación`,
+        formulaHtml: `E<sub>mA</sub> = E<sub>mB</sub>  ⇒  E<sub>cA</sub> + E<sub>pgA</sub> + E<sub>peA</sub> = E<sub>cB</sub> + E<sub>pgB</sub> + E<sub>peB</sub>`,
+        engineeringNote: `La fuerza normal ejercida por una pista curva lisa cambia de dirección constantemente, pero siempre es perpendicular a la velocidad instantánea, por lo que su trabajo es cero.`
+      },
+      {
+        id: `lec-6`,
+        num: `06`,
+        simId: 6,
+        title: `Fuerzas no conservativas y disipación por fricción`,
+        summary: `El trabajo de fuerzas externas distintas al peso y la fuerza elástica es igual a la variación total de energía mecánica del sistema.`,
+        body: `En sistemas reales con rozamiento cinético (fk = μk · N) o motores actuando, la energía mecánica cambia. La fricción cinética siempre se opone al movimiento relativo en la superficie de contacto, realizando trabajo negativo que se disipa en forma de energía térmica.`,
+        formulaTitle: `Teorema del Trabajo y la Energía Mecánica`,
+        formulaHtml: `W<sub>AB</sub><sup>F_ext / fnc</sup> = E<sub>mf</sub> − E<sub>mi</sub> = ΔE<sub>m</sub><br><span style="font-size:0.85rem; color:var(--on-surface-variant);">Para fricción cinética pura: W<sub>fk</sub> = −f<sub>k</sub> · d = ΔE<sub>m</sub> &lt; 0</span>`,
+        engineeringNote: `Un error frecuente es olvidar la variación de altura durante la compresión de un resorte vertical, o invertir el signo de Δh en barras articuladas.`
+      }
+    ];
+
+    function renderLessons() {
+      const container = document.getElementById(`lessons-container`);
+      if (!container) return;
+
+      container.innerHTML = LESSONS_DATA.map((lec) => {
+        const done = appState.completedLessons.includes(lec.id);
+        return `
+          <article id="${lec.id}" class="lesson-card ${done ? `is-completed` : ``}">
+            <div class="section-head" style="margin-bottom: var(--space-md);">
+              <div>
+                <span class="mono-label">Lección ${lec.num}</span>
+                <h3 class="subhead">${lec.title}</h3>
+              </div>
+              <div class="btn-row">
+                <button type="button" class="btn btn-sm ${done ? `btn-secondary` : `btn-primary`}" onclick="toggleLesson('${lec.id}')">
+                  <i data-lucide="${done ? `check-circle-2` : `circle`}" aria-hidden="true"></i>
+                  <span>${done ? `Completada` : `Marcar completada`}</span>
+                </button>
+                <button type="button" class="btn btn-ghost btn-sm" onclick="jumpToSim(${lec.simId})">
+                  <span>Probar en Simulador 0${lec.simId}</span>
+                </button>
+              </div>
+            </div>
+            <div class="lesson-grid">
+              <div>
+                <p style="margin: 0 0 var(--space-sm) 0; font-weight: 500;">${lec.summary}</p>
+                <p style="margin: 0 0 var(--space-md) 0; color: var(--on-surface-variant);">${lec.body}</p>
+                <div class="callout">
+                  <span class="mono-label">Criterio de Ingeniería</span>
+                  <span style="font-size: 0.9rem;">${lec.engineeringNote}</span>
+                </div>
+              </div>
+              <div class="formula-box">
+                <span class="mono-label">${lec.formulaTitle}</span>
+                <div class="formula-main">${lec.formulaHtml}</div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join(``);
+
+      if (window.lucide && typeof window.lucide.createIcons === `function`) {
+        window.lucide.createIcons();
+      }
+    }
+
+    function toggleLesson(lessonId) {
+      const idx = appState.completedLessons.indexOf(lessonId);
+      if (idx === -1) {
+        appState.completedLessons.push(lessonId);
+      } else {
+        appState.completedLessons.splice(idx, 1);
+      }
+      renderLessons();
+      updateProgressUI();
+      saveAppState();
+    }
+
+    /* =====================================================================
+       SIMULATORS INFRASTRUCTURE & CANVAS HI-DPI HELPER
+       ===================================================================== */
+    function setupCanvas(canvasId) {
+      const canvas = document.getElementById(canvasId);
+      if (!canvas) return null;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const rect = canvas.getBoundingClientRect();
+      const w = Math.max(rect.width || canvas.parentElement.clientWidth || 600, 280);
+      const h = rect.height || 340;
+      if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(h * dpr)) {
+        canvas.width = Math.round(w * dpr);
+        canvas.height = Math.round(h * dpr);
+      }
+      const ctx = canvas.getContext(`2d`);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      return { canvas, ctx, w, h };
+    }
+
+    function drawArrow(ctx, x1, y1, x2, y2, color, width, label) {
+      const dx = x2 - x1;
+      const dy = y2 - y1;
+      const len = Math.hypot(dx, dy);
+      if (len < 2) return;
+      const ang = Math.atan2(dy, dx);
+      const head = Math.min(11, len * 0.35);
+
+      ctx.save();
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = width || 2.5;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - head * Math.cos(ang - 0.42), y2 - head * Math.sin(ang - 0.42));
+      ctx.lineTo(x2 - head * Math.cos(ang + 0.42), y2 - head * Math.sin(ang + 0.42));
+      ctx.closePath();
+      ctx.fill();
+
+      if (label) {
+        ctx.font = `600 12px "IBM Plex Mono", monospace`;
+        ctx.fillText(label, x2 + 6, y2 - 6);
+      }
+      ctx.restore();
+    }
+
+    function stopAllSimAnimations() {
+      Object.keys(animFrames).forEach((k) => {
+        if (animFrames[k]) {
+          cancelAnimationFrame(animFrames[k]);
+          animFrames[k] = null;
+        }
+      });
+    }
+
+    function selectSim(simId, skipSave) {
+      stopAllSimAnimations();
+      appState.activeSim = simId;
+      if (!appState.exploredSims.includes(simId)) {
+        appState.exploredSims.push(simId);
+      }
+
+      for (let i = 1; i <= 7; i++) {
+        const panel = document.getElementById(`sim-panel-${i}`);
+        const tab = document.getElementById(`sim-tab-${i}`);
+        const active = i === simId;
+        if (panel) panel.style.display = active ? `block` : `none`;
+        if (tab) {
+          tab.classList.toggle(`is-active`, active);
+          tab.setAttribute(`aria-selected`, active ? `true` : `false`);
+        }
+      }
+
+      updateProgressUI();
+      redrawActiveSim();
+      if (!skipSave) saveAppState();
+    }
+
+    function redrawActiveSim() {
+      if (appState.activeView !== `simuladores`) return;
+      const id = appState.activeSim;
+      if (id === 1) s1Draw();
+      else if (id === 2) s2Update();
+      else if (id === 3) s3Draw();
+      else if (id === 4) s4RecalcStatic();
+      else if (id === 5) s5Draw();
+      else if (id === 6) s6Draw();
+      else if (id === 7) s7Update();
+    }
+
+    /* ---------------------------------------------------------------------
+       SIMULADOR 1: FUERZA, DESPLAZAMIENTO Y ÁNGULO
+       --------------------------------------------------------------------- */
+    let s1State = { F: 40, d: 10, angle: 37, progress: 0, dragging: false };
+
+    function s1SyncForceSlider(val) {
+      const n = document.getElementById(`s1-force-num`);
+      if (n) n.value = val;
+      s1State.F = Number(val) || 0;
+      s1Draw();
+    }
+    function s1SyncForceNum(val) {
+      const clamped = Math.max(0, Math.min(100, Number(val) || 0));
+      const r = document.getElementById(`s1-force-rng`);
+      if (r) r.value = clamped;
+      s1State.F = clamped;
+      s1Draw();
+    }
+    function s1SyncDistSlider(val) {
+      const n = document.getElementById(`s1-dist-num`);
+      if (n) n.value = val;
+      s1State.d = Number(val) || 1;
+      s1Draw();
+    }
+    function s1SyncDistNum(val) {
+      const clamped = Math.max(1, Math.min(25, Number(val) || 1));
+      const r = document.getElementById(`s1-dist-rng`);
+      if (r) r.value = clamped;
+      s1State.d = clamped;
+      s1Draw();
+    }
+    function s1SyncAngleSlider(val) {
+      const n = document.getElementById(`s1-angle-num`);
+      if (n) n.value = val;
+      s1State.angle = Number(val) || 0;
+      s1Draw();
+    }
+    function s1SyncAngleNum(val) {
+      const clamped = Math.max(0, Math.min(180, Number(val) || 0));
+      const r = document.getElementById(`s1-angle-rng`);
+      if (r) r.value = clamped;
+      s1State.angle = clamped;
+      s1Draw();
+    }
+
+    function s1Preset(F, d, ang) {
+      s1State.F = F;
+      s1State.d = d;
+      s1State.angle = ang;
+      s1State.progress = 0;
+      const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+      setVal(`s1-force-rng`, F); setVal(`s1-force-num`, F);
+      setVal(`s1-dist-rng`, d); setVal(`s1-dist-num`, d);
+      setVal(`s1-angle-rng`, ang); setVal(`s1-angle-num`, ang);
+      s1Draw();
+    }
+
+    function s1Animate() {
+      if (animFrames.s1) cancelAnimationFrame(animFrames.s1);
+      s1State.progress = 0;
+      const step = () => {
+        s1State.progress += 0.02;
+        if (s1State.progress >= 1) {
+          s1State.progress = 1;
+          s1Draw();
+          animFrames.s1 = null;
+          return;
+        }
+        s1Draw();
+        animFrames.s1 = requestAnimationFrame(step);
+      };
+      animFrames.s1 = requestAnimationFrame(step);
+    }
+
+    function s1Draw() {
+      const rad = s1State.angle * Math.PI / 180;
+      const cosT = Math.cos(rad);
+      const sinT = Math.sin(rad);
+      const fx = s1State.F * cosT;
+      const fy = s1State.F * sinT;
+      const W = fx * s1State.d;
+
+      const elFx = document.getElementById(`s1-out-fx`);
+      const elFy = document.getElementById(`s1-out-fy`);
+      const elCos = document.getElementById(`s1-out-cos`);
+      const elW = document.getElementById(`s1-out-w`);
+      const elBox = document.getElementById(`s1-classification`);
+      const elTitle = document.getElementById(`s1-class-title`);
+      const elDesc = document.getElementById(`s1-class-desc`);
+
+      if (elFx) elFx.textContent = `${fx.toFixed(2)} N`;
+      if (elFy) elFy.textContent = `${fy.toFixed(2)} N`;
+      if (elCos) elCos.textContent = cosT.toFixed(3);
+      if (elW) elW.textContent = `${W >= 0 ? `+` : ``}${W.toFixed(1)} J`;
+
+      if (elBox && elTitle && elDesc) {
+        elBox.className = `callout`;
+        if (Math.abs(W) < 0.05) {
+          elTitle.textContent = `Trabajo Nulo (W = 0 J)`;
+          elDesc.textContent = `Fuerza perpendicular al desplazamiento (θ = 90°); no aporta ni extrae energía.`;
+        } else if (W > 0) {
+          elBox.classList.add(`callout-positive`);
+          elTitle.textContent = `Trabajo Motor (Positivo)`;
+          elDesc.textContent = `La componente Fx (${fx.toFixed(1)} N) actúa a favor del movimiento.`;
+        } else {
+          elBox.classList.add(`callout-error`);
+          elTitle.textContent = `Trabajo Resistente (Negativo)`;
+          elDesc.textContent = `La componente Fx (${fx.toFixed(1)} N) se opone al desplazamiento.`;
+        }
+      }
+
+      const setup = setupCanvas(`canvas-sim-1`);
+      if (!setup) return;
+      const { ctx, w, h } = setup;
+      const c = getThemeColors();
+
+      const floorY = h * 0.72;
+      const startX = Math.max(85, w * 0.18);
+      const trackSpan = Math.min(w - startX - 95, 280);
+      const dispPx = trackSpan * (s1State.d / 25);
+      const blockX = startX + dispPx * s1State.progress;
+      const blockW = 64;
+      const blockH = 44;
+
+      // Ground
+      ctx.strokeStyle = c.ink;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(24, floorY);
+      ctx.lineTo(w - 24, floorY);
+      ctx.stroke();
+
+      // Hatching
+      ctx.strokeStyle = c.rule;
+      ctx.lineWidth = 1;
+      for (let gx = 30; gx < w - 24; gx += 16) {
+        ctx.beginPath();
+        ctx.moveTo(gx, floorY);
+        ctx.lineTo(gx - 8, floorY + 10);
+        ctx.stroke();
+      }
+
+      // Ghost initial position & displacement arrow
+      if (s1State.progress > 0.02) {
+        ctx.save();
+        ctx.setLineDash([4, 4]);
+        ctx.strokeStyle = c.outline;
+        ctx.strokeRect(startX - blockW / 2, floorY - blockH, blockW, blockH);
+        ctx.restore();
+      }
+      drawArrow(ctx, startX, floorY + 26, startX + dispPx, floorY + 26, c.inkVar, 2, `d = ${s1State.d} m`);
+
+      // Block
+      ctx.fillStyle = c.surfaceHigh;
+      ctx.strokeStyle = c.ink;
+      ctx.lineWidth = 2;
+      ctx.fillRect(blockX - blockW / 2, floorY - blockH, blockW, blockH);
+      ctx.strokeRect(blockX - blockW / 2, floorY - blockH, blockW, blockH);
+
+      const cx = blockX;
+      const cy = floorY - blockH / 2;
+      const vecScale = 1.25;
+      const vecLen = Math.max(24, s1State.F * vecScale);
+      const fxPx = vecLen * cosT;
+      const fyPx = -vecLen * sinT;
+
+      // Dashed projection lines
+      ctx.save();
+      ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = c.outline;
+      ctx.beginPath();
+      ctx.moveTo(cx + fxPx, cy);
+      ctx.lineTo(cx + fxPx, cy + fyPx);
+      ctx.lineTo(cx, cy + fyPx);
+      ctx.stroke();
+      ctx.restore();
+
+      // Components Fx, Fy
+      if (Math.abs(fxPx) > 4) {
+        drawArrow(ctx, cx, cy, cx + fxPx, cy, fx >= 0 ? c.positive : c.error, 2, `Fx`);
+      }
+      if (Math.abs(fyPx) > 4) {
+        drawArrow(ctx, cx, cy, cx, cy + fyPx, c.d2, 2, `Fy`);
+      }
+
+      // Main Force vector
+      drawArrow(ctx, cx, cy, cx + fxPx, cy + fyPx, c.primary, 3, `F=${s1State.F}N`);
+
+      // Angle arc
+      ctx.beginPath();
+      ctx.strokeStyle = c.primary;
+      ctx.lineWidth = 1.5;
+      ctx.arc(cx, cy, 26, -rad, 0, false);
+      ctx.stroke();
+
+      ctx.fillStyle = c.ink;
+      ctx.font = `500 12px "IBM Plex Mono", monospace`;
+      ctx.fillText(`θ = ${s1State.angle}°`, 20, 26);
+      ctx.fillText(`W acumulado = ${(W * s1State.progress).toFixed(1)} J`, 20, 46);
+    }
+
+    function initS1Drag() {
+      const canvas = document.getElementById(`canvas-sim-1`);
+      if (!canvas) return;
+      const updateFromPointer = (ev) => {
+        const rect = canvas.getBoundingClientRect();
+        const px = ev.clientX - rect.left;
+        const py = ev.clientY - rect.top;
+        const w = rect.width;
+        const h = rect.height;
+        const floorY = h * 0.72;
+        const startX = Math.max(85, w * 0.18);
+        const trackSpan = Math.min(w - startX - 95, 280);
+        const dispPx = trackSpan * (s1State.d / 25);
+        const cx = startX + dispPx * s1State.progress;
+        const cy = floorY - 22;
+
+        const dx = px - cx;
+        const dy = cy - py; // up is positive
+        let ang = Math.atan2(Math.max(0, dy), dx) * 180 / Math.PI;
+        ang = Math.max(0, Math.min(180, Math.round(ang)));
+        let mag = Math.round(Math.hypot(dx, Math.max(0, dy)) / 1.25);
+        mag = Math.max(5, Math.min(100, mag));
+
+        s1State.angle = ang;
+        s1State.F = mag;
+        const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+        setVal(`s1-angle-rng`, ang); setVal(`s1-angle-num`, ang);
+        setVal(`s1-force-rng`, mag); setVal(`s1-force-num`, mag);
+        s1Draw();
+      };
+
+      canvas.addEventListener(`pointerdown`, (e) => {
+        s1State.dragging = true;
+        canvas.setPointerCapture(e.pointerId);
+        updateFromPointer(e);
+      });
+      canvas.addEventListener(`pointermove`, (e) => {
+        if (s1State.dragging) updateFromPointer(e);
+      });
+      canvas.addEventListener(`pointerup`, () => { s1State.dragging = false; });
+      canvas.addEventListener(`pointercancel`, () => { s1State.dragging = false; });
+    }
+
+    /* ---------------------------------------------------------------------
+       SIMULADOR 2: TRABAJO NETO Y DCL
+       --------------------------------------------------------------------- */
+    let s2Progress = 0;
+
+    function s2PresetEj4() {
+      const set = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+      set(`s2-f1`, 27);
+      set(`s2-f2`, 13);
+      set(`s2-f3`, 0);
+      set(`s2-a3`, 0);
+      set(`s2-d`, 20);
+      s2Progress = 0;
+      s2Update();
+    }
+
+    function s2Animate() {
+      if (animFrames.s2) cancelAnimationFrame(animFrames.s2);
+      s2Progress = 0;
+      const step = () => {
+        s2Progress += 0.02;
+        if (s2Progress >= 1) {
+          s2Progress = 1;
+          s2Update();
+          animFrames.s2 = null;
+          return;
+        }
+        s2Update();
+        animFrames.s2 = requestAnimationFrame(step);
+      };
+      animFrames.s2 = requestAnimationFrame(step);
+    }
+
+    function s2Update() {
+      const getNum = (id, def) => { const el = document.getElementById(id); return el ? (Number(el.value) || 0) : def; };
+      const f1 = getNum(`s2-f1`, 27);
+      const f2 = getNum(`s2-f2`, 13);
+      const f3 = getNum(`s2-f3`, 10);
+      const a3 = getNum(`s2-a3`, 37);
+      const d = Math.max(1, getNum(`s2-d`, 20));
+      const m = Math.max(1, getNum(`s2-m`, 12));
+
+      const a3Val = document.getElementById(`s2-a3-val`);
+      if (a3Val) a3Val.textContent = `${a3}°`;
+
+      const f3x = f3 * Math.cos(a3 * Math.PI / 180);
+      const f3y = f3 * Math.sin(a3 * Math.PI / 180);
+      const w1 = f1 * d;
+      const w2 = -f2 * d;
+      const w3 = f3x * d;
+      const fr = f1 - f2 + f3x;
+      const wnet = w1 + w2 + w3;
+
+      const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+      setText(`s2-out-w1`, `+${w1.toFixed(1)} J`);
+      setText(`s2-out-w2`, `${w2.toFixed(1)} J`);
+      setText(`s2-out-w3`, `${w3 >= 0 ? `+` : ``}${w3.toFixed(1)} J`);
+      setText(`s2-out-fr`, `${fr >= 0 ? `+` : ``}${fr.toFixed(2)} N`);
+      setText(`s2-out-wnet`, `${wnet >= 0 ? `+` : ``}${wnet.toFixed(1)} J`);
+
+      const setup = setupCanvas(`canvas-sim-2`);
+      if (!setup) return;
+      const { ctx, w, h } = setup;
+      const c = getThemeColors();
+
+      // Left half: Motion track; Right panel: DCL
+      const splitX = w * 0.62;
+      const floorY = h * 0.72;
+
+      // Track
+      ctx.strokeStyle = c.ink;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(20, floorY);
+      ctx.lineTo(splitX - 20, floorY);
+      ctx.stroke();
+
+      const startX = 65;
+      const maxTravel = Math.max(80, splitX - 150);
+      const robX = startX + maxTravel * s2Progress;
+
+      // Robot AGV chassis
+      ctx.fillStyle = c.surfaceHigh;
+      ctx.strokeStyle = c.ink;
+      ctx.lineWidth = 2;
+      ctx.fillRect(robX - 36, floorY - 38, 72, 26);
+      ctx.strokeRect(robX - 36, floorY - 38, 72, 26);
+      // Wheels
+      [robX - 22, robX + 22].forEach((wx) => {
+        ctx.beginPath();
+        ctx.arc(wx, floorY - 7, 7, 0, Math.PI * 2);
+        ctx.fillStyle = c.ink;
+        ctx.fill();
+      });
+
+      drawArrow(ctx, startX, floorY + 24, startX + maxTravel, floorY + 24, c.inkVar, 2, `d = ${d} m`);
+
+      // DCL Divider
+      ctx.strokeStyle = c.rule;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(splitX, 16);
+      ctx.lineTo(splitX, h - 16);
+      ctx.stroke();
+
+      // DCL Center
+      const dclX = splitX + (w - splitX) / 2;
+      const dclY = h * 0.52;
+      ctx.fillStyle = c.ink;
+      ctx.font = `600 12px "IBM Plex Mono", monospace`;
+      ctx.fillText(`DCL EN TIEMPO REAL`, splitX + 16, 28);
+
+      ctx.fillStyle = c.primary;
+      ctx.beginPath();
+      ctx.arc(dclX, dclY, 5, 0, Math.PI * 2);
+      ctx.fill();
+
+      const fg = m * 10;
+      const normal = Math.max(0, fg - f3y);
+      const maxF = Math.max(f1, f2, f3, fg, 30);
+      const sc = 78 / maxF;
+
+      if (f1 > 0) drawArrow(ctx, dclX, dclY, dclX + f1 * sc, dclY, c.positive, 2.5, `F1`);
+      if (f2 > 0) drawArrow(ctx, dclX, dclY, dclX - f2 * sc, dclY, c.error, 2.5, `F2`);
+      if (f3 > 0) {
+        const rad3 = a3 * Math.PI / 180;
+        drawArrow(ctx, dclX, dclY, dclX + f3 * sc * Math.cos(rad3), dclY - f3 * sc * Math.sin(rad3), c.primary, 2.5, `F3`);
+      }
+      drawArrow(ctx, dclX, dclY, dclX, dclY + fg * sc, c.inkVar, 2, `Fg`);
+      drawArrow(ctx, dclX, dclY, dclX, dclY - normal * sc, c.d3, 2, `N`);
+
+      ctx.fillStyle = c.inkVar;
+      ctx.font = `400 11px "IBM Plex Mono", monospace`;
+      ctx.fillText(`ΣWᵢ = ${wnet.toFixed(1)} J`, 20, 28);
+      ctx.fillText(`F_R(x)·d = ${(fr * d).toFixed(1)} J`, 20, 46);
+    }
+
+    /* ---------------------------------------------------------------------
+       SIMULADOR 3: GRÁFICA INTERACTIVA F(x) Y ÁREAS
+       --------------------------------------------------------------------- */
+    let s3Nodes = [
+      { x: 0, f: 5 },
+      { x: 1, f: 15 },
+      { x: 2, f: 15 },
+      { x: 5, f: 0 },
+      { x: 7, f: -2 }
+    ];
+    let s3DragIdx = -1;
+
+    function s3LoadPreset(name) {
+      if (name === `ej10`) {
+        s3Nodes = [
+          { x: 0, f: 0 },
+          { x: 10, f: 30 },
+          { x: 20, f: 60 },
+          { x: 30, f: 90 },
+          { x: 40, f: 120 }
+        ];
+      } else if (name === `ej11`) {
+        s3Nodes = [
+          { x: 0, f: 5 },
+          { x: 1, f: 15 },
+          { x: 2, f: 15 },
+          { x: 5, f: 0 },
+          { x: 7, f: -2 }
+        ];
+      } else {
+        s3Nodes = [
+          { x: 0, f: 0 },
+          { x: 2, f: 40 },
+          { x: 6, f: 40 },
+          { x: 8, f: 0 },
+          { x: 10, f: -15 }
+        ];
+      }
+      s3RenderInputs();
+      s3Draw();
+    }
+
+    function s3RenderInputs() {
+      const box = document.getElementById(`s3-node-inputs`);
+      if (!box) return;
+      box.innerHTML = s3Nodes.map((n, idx) => `
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm);">
+          <div class="field-group">
+            <label class="field-label" for="s3-x-${idx}"><span>x${idx} [m]</span></label>
+            <input type="number" id="s3-x-${idx}" class="input-box" step="0.5" value="${n.x}" oninput="s3InputChange(${idx})">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="s3-f-${idx}"><span>F${idx} [N]</span></label>
+            <input type="number" id="s3-f-${idx}" class="input-box" step="1" value="${n.f}" oninput="s3InputChange(${idx})">
+          </div>
+        </div>
+      `).join(``);
+    }
+
+    function s3InputChange(idx) {
+      const ex = document.getElementById(`s3-x-${idx}`);
+      const ef = document.getElementById(`s3-f-${idx}`);
+      if (!ex || !ef) return;
+      let nx = Number(ex.value);
+      if (idx > 0 && nx < s3Nodes[idx - 1].x) nx = s3Nodes[idx - 1].x;
+      s3Nodes[idx].x = isNaN(nx) ? s3Nodes[idx].x : nx;
+      s3Nodes[idx].f = isNaN(Number(ef.value)) ? 0 : Number(ef.value);
+      s3Draw();
+    }
+
+    function s3ComputeAreas() {
+      let pos = 0;
+      let neg = 0;
+      const segs = [];
+      for (let i = 0; i < s3Nodes.length - 1; i++) {
+        const a = s3Nodes[i];
+        const b = s3Nodes[i + 1];
+        const dx = b.x - a.x;
+        if (dx <= 0) {
+          segs.push({ i, dx: 0, area: 0 });
+          continue;
+        }
+        // Handle crossing zero cleanly
+        if (a.f * b.f < 0) {
+          const t = Math.abs(a.f) / (Math.abs(a.f) + Math.abs(b.f));
+          const x0 = a.x + dx * t;
+          const a1 = 0.5 * a.f * (x0 - a.x);
+          const a2 = 0.5 * b.f * (b.x - x0);
+          if (a1 >= 0) pos += a1; else neg += a1;
+          if (a2 >= 0) pos += a2; else neg += a2;
+          segs.push({ i, dx, area: a1 + a2 });
+        } else {
+          const area = 0.5 * (a.f + b.f) * dx;
+          if (area >= 0) pos += area; else neg += area;
+          segs.push({ i, dx, area });
+        }
+      }
+      return { pos, neg, tot: pos + neg, segs };
+    }
+
+    function s3Draw() {
+      const { pos, neg, tot, segs } = s3ComputeAreas();
+      const setText = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+      setText(`s3-out-pos`, `+${pos.toFixed(2)} J`);
+      setText(`s3-out-neg`, `${neg.toFixed(2)} J`);
+      setText(`s3-out-tot`, `${tot >= 0 ? `+` : ``}${tot.toFixed(2)} J`);
+
+      const list = document.getElementById(`s3-segments-list`);
+      if (list) {
+        list.innerHTML = segs.map((s) => `<li>Tramo [${s3Nodes[s.i].x}→${s3Nodes[s.i + 1].x} m]: <strong>${s.area >= 0 ? `+` : ``}${s.area.toFixed(2)} J</strong></li>`).join(``);
+      }
+
+      const setup = setupCanvas(`canvas-sim-3`);
+      if (!setup) return;
+      const { ctx, w, h } = setup;
+      const c = getThemeColors();
+
+      const pad = { l: 54, r: 28, t: 28, b: 42 };
+      const plotW = w - pad.l - pad.r;
+      const plotH = h - pad.t - pad.b;
+
+      const xMin = s3Nodes[0].x;
+      const xMax = Math.max(xMin + 1, s3Nodes[s3Nodes.length - 1].x);
+      const fVals = s3Nodes.map((n) => n.f);
+      const fMax = Math.max(10, ...fVals) * 1.15;
+      const fMin = Math.min(-5, ...fVals) * 1.25;
+
+      const toPxX = (x) => pad.l + ((x - xMin) / (xMax - xMin)) * plotW;
+      const toPxY = (f) => pad.t + ((fMax - f) / (fMax - fMin)) * plotH;
+      const zeroY = toPxY(0);
+
+      // Grid
+      ctx.strokeStyle = c.rule;
+      ctx.lineWidth = 1;
+      for (let i = 0; i <= 4; i++) {
+        const y = pad.t + (plotH * i) / 4;
+        ctx.beginPath();
+        ctx.moveTo(pad.l, y);
+        ctx.lineTo(w - pad.r, y);
+        ctx.stroke();
+      }
+
+      // Shaded polygonal areas
+      for (let i = 0; i < s3Nodes.length - 1; i++) {
+        const a = s3Nodes[i];
+        const b = s3Nodes[i + 1];
+        const x1 = toPxX(a.x), y1 = toPxY(a.f);
+        const x2 = toPxX(b.x), y2 = toPxY(b.f);
+
+        if (a.f * b.f < 0) {
+          const t = Math.abs(a.f) / (Math.abs(a.f) + Math.abs(b.f));
+          const xm = x1 + (x2 - x1) * t;
+          // Part 1
+          ctx.fillStyle = a.f >= 0 ? c.primarySoft : c.errorBg;
+          ctx.beginPath();
+          ctx.moveTo(x1, zeroY); ctx.lineTo(x1, y1); ctx.lineTo(xm, zeroY);
+          ctx.closePath(); ctx.fill();
+          // Part 2
+          ctx.fillStyle = b.f >= 0 ? c.primarySoft : c.errorBg;
+          ctx.beginPath();
+          ctx.moveTo(xm, zeroY); ctx.lineTo(x2, y2); ctx.lineTo(x2, zeroY);
+          ctx.closePath(); ctx.fill();
+        } else {
+          ctx.fillStyle = (a.f + b.f) >= 0 ? c.primarySoft : c.errorBg;
+          ctx.beginPath();
+          ctx.moveTo(x1, zeroY); ctx.lineTo(x1, y1); ctx.lineTo(x2, y2); ctx.lineTo(x2, zeroY);
+          ctx.closePath(); ctx.fill();
+        }
+      }
+
+      // Zero baseline and Y axis
+      ctx.strokeStyle = c.ink;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(pad.l, pad.t);
+      ctx.lineTo(pad.l, h - pad.b);
+      ctx.moveTo(pad.l, zeroY);
+      ctx.lineTo(w - pad.r, zeroY);
+      ctx.stroke();
+
+      // Curve line
+      ctx.strokeStyle = c.primary;
+      ctx.lineWidth = 2.5;
+      ctx.beginPath();
+      s3Nodes.forEach((n, idx) => {
+        const px = toPxX(n.x), py = toPxY(n.f);
+        if (idx === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      });
+      ctx.stroke();
+
+      // Control nodes & labels
+      ctx.font = `500 11px "IBM Plex Mono", monospace`;
+      s3Nodes.forEach((n, idx) => {
+        const px = toPxX(n.x), py = toPxY(n.f);
+        ctx.fillStyle = c.bg;
+        ctx.strokeStyle = c.primary;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(px, py, 6, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = c.ink;
+        ctx.fillText(`${n.f}N`, px - 10, py - 10);
+        ctx.fillStyle = c.inkVar;
+        ctx.fillText(`${n.x}m`, px - 8, h - pad.b + 16);
+      });
+
+      ctx.fillStyle = c.inkVar;
+      ctx.fillText(`F (N)`, 10, pad.t + 6);
+      ctx.fillText(`x (m)`, w - pad.r - 30, zeroY - 6);
+    }
+
+    function initS3Drag() {
+      const canvas = document.getElementById(`canvas-sim-3`);
+      if (!canvas) return;
+      const getCoords = (ev) => {
+        const rect = canvas.getBoundingClientRect();
+        return { px: ev.clientX - rect.left, py: ev.clientY - rect.top, w: rect.width, h: rect.height };
+      };
+      canvas.addEventListener(`pointerdown`, (e) => {
+        const { px, py, w, h } = getCoords(e);
+        const pad = { l: 54, r: 28, t: 28, b: 42 };
+        const xMin = s3Nodes[0].x;
+        const xMax = Math.max(xMin + 1, s3Nodes[s3Nodes.length - 1].x);
+        const fVals = s3Nodes.map((n) => n.f);
+        const fMax = Math.max(10, ...fVals) * 1.15;
+        const fMin = Math.min(-5, ...fVals) * 1.25;
+        const toPxX = (x) => pad.l + ((x - xMin) / (xMax - xMin)) * (w - pad.l - pad.r);
+        const toPxY = (f) => pad.t + ((fMax - f) / (fMax - fMin)) * (h - pad.t - pad.b);
+
+        let best = -1, bestDist = 22;
+        s3Nodes.forEach((n, idx) => {
+          const dist = Math.hypot(px - toPxX(n.x), py - toPxY(n.f));
+          if (dist < bestDist) { bestDist = dist; best = idx; }
+        });
+        if (best >= 0) {
+          s3DragIdx = best;
+          canvas.setPointerCapture(e.pointerId);
+        }
+      });
+      canvas.addEventListener(`pointermove`, (e) => {
+        if (s3DragIdx < 0) return;
+        const { py, h } = getCoords(e);
+        const pad = { t: 28, b: 42 };
+        const fVals = s3Nodes.map((n) => n.f);
+        const fMax = Math.max(10, ...fVals) * 1.15;
+        const fMin = Math.min(-5, ...fVals) * 1.25;
+        const ratio = Math.max(0, Math.min(1, (py - pad.t) / (h - pad.t - pad.b)));
+        const newF = Math.round(fMax - ratio * (fMax - fMin));
+        s3Nodes[s3DragIdx].f = Math.max(-100, Math.min(200, newF));
+        const inputEl = document.getElementById(`s3-f-${s3DragIdx}`);
+        if (inputEl) inputEl.value = s3Nodes[s3DragIdx].f;
+        s3Draw();
+      });
+      canvas.addEventListener(`pointerup`, () => { s3DragIdx = -1; });
+      canvas.addEventListener(`pointercancel`, () => { s3DragIdx = -1; });
+    }
+
+    /* ---------------------------------------------------------------------
+       SIMULADOR 4: CONSERVACIÓN DE ENERGÍA EN RAMPA
+       --------------------------------------------------------------------- */
+    let s4State = { t: 0, playing: false };
+
+    function s4HeightAt(u, profile, h0) {
+      if (profile === `double`) {
+        // Starts at h0, dips to 2m at u=0.45, rises to 8m at u=0.82, then 8m plateau
+        if (u < 0.45) {
+          const k = u / 0.45;
+          return 2 + (h0 - 2) * Math.pow(Math.cos(k * Math.PI / 2), 2);
+        } else if (u < 0.82) {
+          const k = (u - 0.45) / 0.37;
+          const peakB = Math.min(h0 - 0.5, 8);
+          return 2 + (peakB - 2) * Math.pow(Math.sin(k * Math.PI / 2), 2);
+        }
+        return Math.min(h0 - 0.5, 8);
+      } else if (profile === `parabola`) {
+        const x = (u - 0.5) * 2;
+        return h0 * x * x;
+      } else {
+        return u < 0.65 ? h0 * Math.pow(1 - u / 0.65, 1.6) : 0;
+      }
+    }
+
+    function s4Reset() {
+      if (animFrames.s4) { cancelAnimationFrame(animFrames.s4); animFrames.s4 = null; }
+      s4State = { t: 0, playing: false };
+      const btn = document.getElementById(`s4-play-btn`);
+      if (btn) btn.textContent = `Reproducir`;
+      s4RecalcStatic();
+    }
+
+    function s4TogglePlay() {
+      s4State.playing = !s4State.playing;
+      const btn = document.getElementById(`s4-play-btn`);
+      if (btn) btn.textContent = s4State.playing ? `Pausar` : `Reproducir`;
+      if (s4State.playing) {
+        if (s4State.t >= 0.99) s4State.t = 0;
+        const step = () => {
+          if (!s4State.playing) return;
+          s4State.t += 0.006;
+          if (s4State.t >= 1) {
+            s4State.t = 1;
+            s4State.playing = false;
+            if (btn) btn.textContent = `Reproducir`;
+          }
+          s4RecalcStatic();
+          if (s4State.playing) animFrames.s4 = requestAnimationFrame(step);
+        };
+        animFrames.s4 = requestAnimationFrame(step);
+      }
+    }
+
+    function s4RecalcStatic() {
+      const m = Math.max(0.5, Number(document.getElementById(`s4-mass`)?.value) || 2);
+      const h0 = Number(document.getElementById(`s4-ha`)?.value) || 13;
+      const v0 = Number(document.getElementById(`s4-va`)?.value) || 0;
+      const g = Number(document.getElementById(`s4-g`)?.value) || 10;
+      const profile = document.getElementById(`s4-profile`)?.value || `double`;
+
+      const setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+      setTxt(`s4-ha-val`, `${h0.toFixed(1)} m`);
+      setTxt(`s4-va-val`, `${v0.toFixed(1)} m/s`);
+
+      const em = 0.5 * m * v0 * v0 + m * g * h0;
+      const hCurr = s4HeightAt(s4State.t, profile, h0);
+      const epg = m * g * hCurr;
+      const ec = Math.max(0, em - epg);
+      const vCurr = Math.sqrt((2 * ec) / m);
+
+      setTxt(`s4-out-h`, `${hCurr.toFixed(2)} m`);
+      setTxt(`s4-out-v`, `${vCurr.toFixed(2)} m/s`);
+      setTxt(`s4-out-ec`, `${ec.toFixed(1)} J`);
+      setTxt(`s4-out-epg`, `${epg.toFixed(1)} J`);
+      setTxt(`s4-out-em`, `${em.toFixed(1)} J`);
+
+      const setup = setupCanvas(`canvas-sim-4`);
+      if (!setup) return;
+      const { ctx, w, h } = setup;
+      const c = getThemeColors();
+
+      // Left 68% Track, Right 32% Energy Bars + Speedometer
+      const trackW = w * 0.66;
+      const padL = 32, padB = 34, padT = 32;
+      const maxH = Math.max(h0, 14) * 1.15;
+      const toX = (u) => padL + u * (trackW - padL - 16);
+      const toY = (hm) => (h - padB) - (hm / maxH) * (h - padT - padB);
+
+      // Baseline N.R.
+      ctx.strokeStyle = c.rule;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(padL, h - padB);
+      ctx.lineTo(trackW - 10, h - padB);
+      ctx.stroke();
+
+      // Curve
+      ctx.strokeStyle = c.ink;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      for (let i = 0; i <= 80; i++) {
+        const u = i / 80;
+        const px = toX(u), py = toY(s4HeightAt(u, profile, h0));
+        if (i === 0) ctx.moveTo(px, py);
+        else ctx.lineTo(px, py);
+      }
+      ctx.stroke();
+
+      // Ball
+      const bx = toX(s4State.t);
+      const by = toY(hCurr) - 9;
+      ctx.fillStyle = c.primary;
+      ctx.beginPath();
+      ctx.arc(bx, by, 9, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Energy Bars Panel
+      const barAreaX = trackW + 18;
+      const barMaxH = h - 105;
+      const barBaseY = h - 34;
+      const barW = 28;
+      const bars = [
+        { label: `Ec`, val: ec, color: c.primary },
+        { label: `Epg`, val: epg, color: c.d3 },
+        { label: `Em`, val: em, color: c.ink }
+      ];
+
+      ctx.fillStyle = c.ink;
+      ctx.font = `600 11px "IBM Plex Mono", monospace`;
+      ctx.fillText(`ENERGÍA (J) | v=${vCurr.toFixed(1)} m/s`, barAreaX, 24);
+
+      bars.forEach((b, idx) => {
+        const x = barAreaX + idx * (barW + 16);
+        const bh = em > 0 ? (b.val / em) * barMaxH : 0;
+        ctx.fillStyle = c.surface;
+        ctx.fillRect(x, barBaseY - barMaxH, barW, barMaxH);
+        ctx.fillStyle = b.color;
+        ctx.fillRect(x, barBaseY - bh, barW, bh);
+        ctx.fillStyle = c.inkVar;
+        ctx.fillText(b.label, x + 4, barBaseY + 16);
+      });
+    }
+
+    /* ---------------------------------------------------------------------
+       SIMULADOR 5: SISTEMA MASA–RESORTE HORIZONTAL Y VERTICAL
+       --------------------------------------------------------------------- */
+    let s5State = { x: 0, v: 0, playing: false, xMax: 1 };
+
+    function s5ComputeMaxCompression(m, k, v0, mode) {
+      const g = 10;
+      const ec0 = 0.5 * m * v0 * v0;
+      if (mode === `horizontal`) {
+        return Math.sqrt((2 * ec0) / k);
+      } else {
+        // 0.5*k*x^2 - m*g*x - ec0 = 0
+        const disc = m * g * m * g + 2 * k * ec0;
+        return (m * g + Math.sqrt(disc)) / k;
+      }
+    }
+
+    function s5Reset() {
+      if (animFrames.s5) { cancelAnimationFrame(animFrames.s5); animFrames.s5 = null; }
+      const m = Math.max(0.5, Number(document.getElementById(`s5-m`)?.value) || 2);
+      const k = Number(document.getElementById(`s5-k`)?.value) || 250;
+      const v0 = Number(document.getElementById(`s5-v0`)?.value) || 11.18;
+      const mode = document.getElementById(`s5-mode`)?.value || `horizontal`;
+
+      const setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+      setTxt(`s5-k-val`, `${k} N/m`);
+      setTxt(`s5-v0-val`, `${v0.toFixed(2)} m/s`);
+
+      s5State.x = 0;
+      s5State.v = v0;
+      s5State.playing = false;
+      s5State.xMax = s5ComputeMaxCompression(m, k, v0, mode);
+
+      const note = document.getElementById(`s5-cota-note`);
+      if (note) {
+        note.textContent = mode === `horizontal`
+          ? `Modo horizontal: Δh = 0 durante la compresión (½mv₀² = ½kΔx²).`
+          : `Modo vertical: el bloque desciende Δx adicional, liberando +mgΔx hacia el resorte.`;
+      }
+
+      const btn = document.getElementById(`s5-play-btn`);
+      if (btn) btn.textContent = `Soltar / Impulsar`;
+      s5Draw();
+    }
+
+    function s5TogglePlay() {
+      s5State.playing = !s5State.playing;
+      const btn = document.getElementById(`s5-play-btn`);
+      if (btn) btn.textContent = s5State.playing ? `Pausar` : `Reanudar`;
+
+      if (s5State.playing) {
+        const m = Math.max(0.5, Number(document.getElementById(`s5-m`)?.value) || 2);
+        const k = Number(document.getElementById(`s5-k`)?.value) || 250;
+        const mode = document.getElementById(`s5-mode`)?.value || `horizontal`;
+        const g = 10;
+
+        const step = () => {
+          if (!s5State.playing) return;
+          const dt = 0.016;
+          // Symplectic Euler
+          const a = (-k * s5State.x + (mode === `vertical` ? m * g : 0)) / m;
+          s5State.v += a * dt;
+          s5State.x += s5State.v * dt;
+          if (s5State.x < 0) {
+            s5State.x = 0;
+            s5State.v = Math.abs(s5State.v);
+          }
+          s5Draw();
+          animFrames.s5 = requestAnimationFrame(step);
+        };
+        animFrames.s5 = requestAnimationFrame(step);
+      }
+    }
+
+    function s5Draw() {
+      const m = Math.max(0.5, Number(document.getElementById(`s5-m`)?.value) || 2);
+      const k = Number(document.getElementById(`s5-k`)?.value) || 250;
+      const v0 = Number(document.getElementById(`s5-v0`)?.value) || 11.18;
+      const mode = document.getElementById(`s5-mode`)?.value || `horizontal`;
+      const g = 10;
+
+      const ec = 0.5 * m * s5State.v * s5State.v;
+      const epe = 0.5 * k * s5State.x * s5State.x;
+      const epgDelta = mode === `vertical` ? -m * g * s5State.x : 0;
+      const em = 0.5 * m * v0 * v0;
+
+      const setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+      setTxt(`s5-out-x`, `${s5State.x.toFixed(3)} m`);
+      setTxt(`s5-out-xmax`, `${s5State.xMax.toFixed(3)} m`);
+      setTxt(`s5-out-ec`, `${ec.toFixed(1)} J`);
+      setTxt(`s5-out-epe`, `${epe.toFixed(1)} J`);
+      setTxt(`s5-out-em`, `${em.toFixed(1)} J`);
+
+      const setup = setupCanvas(`canvas-sim-5`);
+      if (!setup) return;
+      const { ctx, w, h } = setup;
+      const c = getThemeColors();
+
+      const scalePx = Math.min(110, 120 / Math.max(0.5, s5State.xMax));
+      const compPx = Math.min(130, s5State.x * scalePx);
+
+      if (mode === `horizontal`) {
+        const wallX = w * 0.65;
+        const eqX = wallX - 170;
+        const blockX = eqX + compPx;
+        const floorY = h * 0.68;
+
+        ctx.strokeStyle = c.ink;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(30, floorY); ctx.lineTo(wallX + 20, floorY);
+        ctx.moveTo(wallX, floorY - 120); ctx.lineTo(wallX, floorY);
+        ctx.stroke();
+
+        // Spring coils from blockX+24 to wallX
+        const spStart = blockX + 24;
+        const spLen = Math.max(24, wallX - spStart);
+        ctx.strokeStyle = c.primary;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(spStart, floorY - 22);
+        const coils = 10;
+        for (let i = 1; i <= coils; i++) {
+          const cx = spStart + (spLen * i) / (coils + 1);
+          const cy = floorY - 22 + (i % 2 === 0 ? 12 : -12);
+          ctx.lineTo(cx, cy);
+        }
+        ctx.lineTo(wallX, floorY - 22);
+        ctx.stroke();
+
+        ctx.fillStyle = c.surfaceHigh;
+        ctx.strokeStyle = c.ink;
+        ctx.fillRect(blockX - 24, floorY - 44, 48, 44);
+        ctx.strokeRect(blockX - 24, floorY - 44, 48, 44);
+      } else {
+        const cx = w * 0.42;
+        const baseFloorY = h * 0.88;
+        const eqY = baseFloorY - 165;
+        const blockY = eqY + compPx;
+
+        ctx.strokeStyle = c.ink;
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(cx - 80, baseFloorY); ctx.lineTo(cx + 80, baseFloorY);
+        ctx.stroke();
+
+        const spStart = blockY + 22;
+        const spLen = Math.max(24, baseFloorY - spStart);
+        ctx.strokeStyle = c.primary;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(cx, spStart);
+        const coils = 10;
+        for (let i = 1; i <= coils; i++) {
+          const sy = spStart + (spLen * i) / (coils + 1);
+          const sx = cx + (i % 2 === 0 ? 14 : -14);
+          ctx.lineTo(sx, sy);
+        }
+        ctx.lineTo(cx, baseFloorY);
+        ctx.stroke();
+
+        ctx.fillStyle = c.surfaceHigh;
+        ctx.strokeStyle = c.ink;
+        ctx.fillRect(cx - 26, blockY - 22, 52, 44);
+        ctx.strokeRect(cx - 26, blockY - 22, 52, 44);
+      }
+
+      ctx.fillStyle = c.ink;
+      ctx.font = `500 12px "IBM Plex Mono", monospace`;
+      ctx.fillText(`Δx = ${s5State.x.toFixed(3)} m  |  Δx_max = ${s5State.xMax.toFixed(3)} m`, 20, 26);
+      if (mode === `vertical`) {
+        ctx.fillText(`ΔEpg = ${epgDelta.toFixed(1)} J (trabajo peso durante compresión)`, 20, 44);
+      }
+    }
+
+    /* ---------------------------------------------------------------------
+       SIMULADOR 6: FRICCIÓN Y DISIPACIÓN TÉRMICA
+       --------------------------------------------------------------------- */
+    let s6State = { s: 0, v: 0, heat: 0, playing: false, dStop: 20 };
+
+    function s6CalcPhysics() {
+      const m = Math.max(1, Number(document.getElementById(`s6-m`)?.value) || 4);
+      const h0 = Number(document.getElementById(`s6-h`)?.value) || 5;
+      const alphaDeg = Number(document.getElementById(`s6-angle`)?.value) || 37;
+      const mu = Number(document.getElementById(`s6-mu`)?.value) || 0.25;
+      const rampFriction = document.getElementById(`s6-ramp-friction`)?.value === `yes`;
+      const g = 10;
+      const alpha = alphaDeg * Math.PI / 180;
+      const rampLen = h0 / Math.sin(alpha);
+
+      const setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+      setTxt(`s6-h-val`, `${h0.toFixed(1)} m`);
+      setTxt(`s6-angle-val`, `${alphaDeg}°`);
+      setTxt(`s6-mu-val`, mu.toFixed(2));
+
+      const emi = m * g * h0;
+      let heatRamp = 0;
+      if (rampFriction) {
+        heatRamp = mu * m * g * Math.cos(alpha) * rampLen;
+      }
+      const remEnergy = Math.max(0, emi - heatRamp);
+      const dStop = mu > 0 ? remEnergy / (mu * m * g) : 999;
+
+      return { m, h0, alphaDeg, alpha, mu, rampFriction, g, rampLen, emi, heatRamp, dStop };
+    }
+
+    function s6Reset() {
+      if (animFrames.s6) { cancelAnimationFrame(animFrames.s6); animFrames.s6 = null; }
+      const p = s6CalcPhysics();
+      s6State = { s: 0, v: 0, heat: 0, playing: false, dStop: p.dStop };
+      const btn = document.getElementById(`s6-play-btn`);
+      if (btn) btn.textContent = `Soltar bloque`;
+      s6Draw();
+    }
+
+    function s6TogglePlay() {
+      s6State.playing = !s6State.playing;
+      const btn = document.getElementById(`s6-play-btn`);
+      if (btn) btn.textContent = s6State.playing ? `Pausar` : `Reanudar`;
+
+      if (s6State.playing) {
+        const p = s6CalcPhysics();
+        if (s6State.s >= p.rampLen + p.dStop - 0.02) {
+          s6State.s = 0; s6State.v = 0; s6State.heat = 0;
+        }
+        const step = () => {
+          if (!s6State.playing) return;
+          const dt = 0.02;
+          if (s6State.s < p.rampLen) {
+            const a = p.g * Math.sin(p.alpha) - (p.rampFriction ? p.mu * p.g * Math.cos(p.alpha) : 0);
+            if (a <= 0) {
+              s6State.playing = false;
+              if (btn) btn.textContent = `Soltar bloque`;
+              s6Draw();
+              return;
+            }
+            s6State.v += a * dt;
+            s6State.s += s6State.v * dt;
+            if (p.rampFriction) {
+              s6State.heat = p.mu * p.m * p.g * Math.cos(p.alpha) * Math.min(s6State.s, p.rampLen);
+            }
+          } else {
+            const dFlat = s6State.s - p.rampLen;
+            const a = -p.mu * p.g;
+            s6State.v += a * dt;
+            if (s6State.v <= 0) {
+              s6State.v = 0;
+              s6State.s = p.rampLen + p.dStop;
+              s6State.heat = p.emi;
+              s6State.playing = false;
+              if (btn) btn.textContent = `Soltar bloque`;
+              s6Draw();
+              return;
+            }
+            s6State.s += s6State.v * dt;
+            s6State.heat = Math.min(p.emi, p.heatRamp + p.mu * p.m * p.g * dFlat);
+          }
+          s6Draw();
+          if (s6State.playing) animFrames.s6 = requestAnimationFrame(step);
+        };
+        animFrames.s6 = requestAnimationFrame(step);
+      }
+    }
+
+    function s6Draw() {
+      const p = s6CalcPhysics();
+      const emCurr = Math.max(0, p.emi - s6State.heat);
+      const setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+      setTxt(`s6-out-emi`, `${p.emi.toFixed(1)} J`);
+      setTxt(`s6-out-em`, `${emCurr.toFixed(1)} J`);
+      setTxt(`s6-out-heat`, `${s6State.heat.toFixed(1)} J`);
+      setTxt(`s6-out-dstop`, `${p.dStop.toFixed(2)} m`);
+
+      const setup = setupCanvas(`canvas-sim-6`);
+      if (!setup) return;
+      const { ctx, w, h } = setup;
+      const c = getThemeColors();
+
+      const baseY = h * 0.78;
+      const startX = 48;
+      const rampBasePx = 140;
+      const rampHeightPx = Math.min(h * 0.52, rampBasePx * Math.tan(p.alpha));
+      const cornerX = startX + rampBasePx;
+      const flatPxMax = w - cornerX - 95;
+
+      // Ramp & rough floor
+      ctx.strokeStyle = c.ink;
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(startX, baseY - rampHeightPx);
+      ctx.lineTo(cornerX, baseY);
+      ctx.lineTo(w - 90, baseY);
+      ctx.stroke();
+
+      // Rough surface teeth
+      ctx.strokeStyle = c.error;
+      ctx.lineWidth = 1.5;
+      for (let rx = cornerX; rx < w - 95; rx += 10) {
+        ctx.beginPath();
+        ctx.moveTo(rx, baseY);
+        ctx.lineTo(rx - 4, baseY + 6);
+        ctx.stroke();
+      }
+
+      // Block coordinates
+      let bx, by, rot = 0;
+      if (s6State.s <= p.rampLen) {
+        const frac = s6State.s / p.rampLen;
+        bx = startX + frac * rampBasePx;
+        by = (baseY - rampHeightPx) + frac * rampHeightPx;
+        rot = Math.atan2(rampHeightPx, rampBasePx);
+      } else {
+        const dFlat = s6State.s - p.rampLen;
+        const scaleFlat = flatPxMax / Math.max(p.dStop, 10);
+        bx = cornerX + Math.min(flatPxMax, dFlat * scaleFlat);
+        by = baseY;
+      }
+
+      ctx.save();
+      ctx.translate(bx, by);
+      ctx.rotate(rot);
+      ctx.fillStyle = c.primary;
+      ctx.fillRect(-16, -24, 32, 24);
+      ctx.restore();
+
+      // Thermal Gauge on Right
+      const tx = w - 58;
+      const th = h - 90;
+      const ty = 44;
+      const heatRatio = p.emi > 0 ? Math.min(1, s6State.heat / p.emi) : 0;
+      ctx.fillStyle = c.surface;
+      ctx.fillRect(tx, ty, 22, th);
+      ctx.fillStyle = c.error;
+      ctx.fillRect(tx, ty + th * (1 - heatRatio), 22, th * heatRatio);
+      ctx.strokeStyle = c.ink;
+      ctx.lineWidth = 1;
+      ctx.strokeRect(tx, ty, 22, th);
+
+      ctx.fillStyle = c.ink;
+      ctx.font = `600 11px "IBM Plex Mono", monospace`;
+      ctx.fillText(`CALOR`, tx - 6, ty - 10);
+      ctx.fillText(`${Math.round(heatRatio * 100)}%`, tx - 2, ty + th + 16);
+    }
+
+    /* ---------------------------------------------------------------------
+       SIMULADOR 7: APLICACIONES ROBÓTICAS
+       --------------------------------------------------------------------- */
+    function s7SwitchSubmode() {
+      const mode = document.getElementById(`s7-submode`)?.value || `actuator`;
+      const show = (id, flag) => { const el = document.getElementById(id); if (el) el.style.display = flag ? `flex` : `none`; };
+      show(`s7-ctrl-actuator`, mode === `actuator`);
+      show(`s7-ctrl-agv`, mode === `agv`);
+      show(`s7-ctrl-arm`, mode === `arm`);
+      s7Update();
+    }
+
+    function s7Update() {
+      const mode = document.getElementById(`s7-submode`)?.value || `actuator`;
+      const setTxt = (id, t) => { const el = document.getElementById(id); if (el) el.textContent = t; };
+      const setup = setupCanvas(`canvas-sim-7`);
+      if (!setup) return;
+      const { ctx, w, h } = setup;
+      const c = getThemeColors();
+
+      if (mode === `actuator`) {
+        const f = Number(document.getElementById(`s7a-f`)?.value) || 180;
+        const d = Number(document.getElementById(`s7a-d`)?.value) || 0.6;
+        const m = Number(document.getElementById(`s7a-m`)?.value) || 10;
+        const beta = Number(document.getElementById(`s7a-ang`)?.value) || 30;
+        const dt = Math.max(0.2, Number(document.getElementById(`s7a-t`)?.value) || 2);
+
+        setTxt(`s7a-f-val`, `${f} N`);
+        setTxt(`s7a-d-val`, `${d.toFixed(2)} m`);
+        setTxt(`s7a-ang-val`, `${beta}°`);
+
+        const wAct = f * d;
+        const dEpg = m * 9.81 * d * Math.sin(beta * Math.PI / 180);
+        const dEc = wAct - dEpg;
+        const pwr = wAct / dt;
+
+        setTxt(`s7-l1`, `Trabajo actuador`); setTxt(`s7-v1`, `+${wAct.toFixed(1)} J`);
+        setTxt(`s7-l2`, `ΔEpg carga`); setTxt(`s7-v2`, `+${dEpg.toFixed(1)} J`);
+        setTxt(`s7-l3`, `ΔEc neta`); setTxt(`s7-v3`, `${dEc >= 0 ? `+` : ``}${dEc.toFixed(1)} J`);
+        setTxt(`s7-l4`, `Potencia media`); setTxt(`s7-v4`, `${pwr.toFixed(1)} W`);
+
+        // Draw inclined linear actuator
+        const ox = w * 0.22, oy = h * 0.78;
+        const rad = beta * Math.PI / 180;
+        const len = 120 + d * 110;
+        ctx.save();
+        ctx.translate(ox, oy);
+        ctx.rotate(-rad);
+        // Cylinder body
+        ctx.fillStyle = c.surfaceHigh;
+        ctx.strokeStyle = c.ink;
+        ctx.lineWidth = 2;
+        ctx.fillRect(0, -16, 110, 32);
+        ctx.strokeRect(0, -16, 110, 32);
+        // Rod
+        ctx.fillStyle = c.primary;
+        ctx.fillRect(110, -6, len - 110, 12);
+        // Payload
+        ctx.fillStyle = c.ink;
+        ctx.fillRect(len, -20, 40, 40);
+        drawArrow(ctx, len + 20, -32, len + 85, -32, c.primary, 2.5, `F=${f}N`);
+        ctx.restore();
+      } else if (mode === `agv`) {
+        const m = Math.max(50, Number(document.getElementById(`s7b-m`)?.value) || 320);
+        const crr = Number(document.getElementById(`s7b-crr`)?.value) || 0.018;
+        const slope = Number(document.getElementById(`s7b-slope`)?.value) || 4;
+        const d = Number(document.getElementById(`s7b-d`)?.value) || 80;
+
+        setTxt(`s7b-crr-val`, crr.toFixed(3));
+        setTxt(`s7b-slope-val`, `${slope.toFixed(1)}°`);
+
+        const rad = slope * Math.PI / 180;
+        const fRod = crr * m * 9.81 * Math.cos(rad);
+        const fGrav = m * 9.81 * Math.sin(rad);
+        const wRod = -fRod * d;
+        const wGrav = -fGrav * d;
+        const wMotor = (fRod + fGrav) * d;
+        const wh = wMotor / 3600;
+
+        setTxt(`s7-l1`, `W_motor requerido`); setTxt(`s7-v1`, `+${(wMotor / 1000).toFixed(2)} kJ`);
+        setTxt(`s7-l2`, `Pérdida rodadura`); setTxt(`s7-v2`, `${(wRod / 1000).toFixed(2)} kJ`);
+        setTxt(`s7-l3`, `Trabajo contra peso`); setTxt(`s7-v3`, `${(wGrav / 1000).toFixed(2)} kJ`);
+        setTxt(`s7-l4`, `Energía batería`); setTxt(`s7-v4`, `${wh.toFixed(2)} Wh`);
+
+        // Draw AGV on warehouse slope
+        const p1x = 40, p1y = h * 0.78;
+        const p2x = w - 40, p2y = p1y - (p2x - p1x) * Math.tan(rad * 1.4);
+        ctx.strokeStyle = c.ink;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(p1x, p1y); ctx.lineTo(p2x, p2y); ctx.stroke();
+
+        ctx.save();
+        ctx.translate((p1x + p2x) / 2, (p1y + p2y) / 2);
+        ctx.rotate(-Math.atan2(p1y - p2y, p2x - p1x));
+        ctx.fillStyle = c.primary;
+        ctx.fillRect(-45, -34, 90, 22);
+        ctx.fillStyle = c.surfaceHigh;
+        ctx.strokeStyle = c.ink;
+        ctx.fillRect(-28, -56, 56, 22);
+        ctx.strokeRect(-28, -56, 56, 22);
+        drawArrow(ctx, 45, -24, 110, -24, c.positive, 2.5, `F_mot`);
+        drawArrow(ctx, -45, -14, -95, -14, c.error, 2, `f_rod`);
+        ctx.restore();
+      } else {
+        const m = Math.max(1, Number(document.getElementById(`s7c-m`)?.value) || 5);
+        const L = Number(document.getElementById(`s7c-L`)?.value) || 1.0;
+        const theta = Number(document.getElementById(`s7c-theta`)?.value) || 60;
+        const k = Number(document.getElementById(`s7c-k`)?.value) || 350;
+
+        setTxt(`s7c-L-val`, `${L.toFixed(2)} m`);
+        setTxt(`s7c-theta-val`, `${theta}°`);
+        setTxt(`s7c-k-val`, `${k} N/m`);
+
+        const rad = theta * Math.PI / 180;
+        const dh = L * (1 - Math.cos(rad)); // drop from vertical up
+        const wWeight = m * 9.81 * dh; // positive when descending
+        const dxSpring = 0.28 * L * Math.sin(rad / 2) * 2;
+        const epe = 0.5 * k * dxSpring * dxSpring;
+        const wServo = wWeight - epe; // remaining work for servo
+
+        setTxt(`s7-l1`, `Descenso carga Δh`); setTxt(`s7-v1`, `${dh.toFixed(3)} m`);
+        setTxt(`s7-l2`, `E_pg liberada`); setTxt(`s7-v2`, `${wWeight.toFixed(1)} J`);
+        setTxt(`s7-l3`, `E_pe en resorte`); setTxt(`s7-v3`, `${epe.toFixed(1)} J`);
+        setTxt(`s7-l4`, `Trabajo neto servo`); setTxt(`s7-v4`, `${wServo.toFixed(1)} J`);
+
+        // Draw robotic arm pivot and spring balancer
+        const px = w * 0.42, py = h * 0.52;
+        const armPx = 115 * L;
+        const ex = px + armPx * Math.sin(rad);
+        const ey = py - armPx * Math.cos(rad);
+
+        // Anchor for spring behind pivot
+        const ax = px - 42, ay = py + 55;
+        const attachX = px + (armPx * 0.45) * Math.sin(rad);
+        const attachY = py - (armPx * 0.45) * Math.cos(rad);
+
+        // Spring
+        ctx.strokeStyle = c.d3;
+        ctx.lineWidth = 2.5;
+        ctx.beginPath(); ctx.moveTo(ax, ay); ctx.lineTo(attachX, attachY); ctx.stroke();
+
+        // Arm link
+        ctx.strokeStyle = c.ink;
+        ctx.lineWidth = 8;
+        ctx.beginPath(); ctx.moveTo(px, py); ctx.lineTo(ex, ey); ctx.stroke();
+
+        // Pivot & Payload
+        ctx.fillStyle = c.primary;
+        ctx.beginPath(); ctx.arc(px, py, 9, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = c.error;
+        ctx.beginPath(); ctx.arc(ex, ey, 11, 0, Math.PI * 2); ctx.fill();
+        drawArrow(ctx, ex, ey, ex, ey + 50, c.inkVar, 2, `Fg=${(m * 9.81).toFixed(0)}N`);
+      }
+    }
+
+    /* =====================================================================
+       EXERCISE BANK & DOCENTE AUDIT (10 EXERCISES)
+       ===================================================================== */
+    const EXERCISES_DATA = [
+      {
+        id: `ex-1`,
+        cat: `trabajo`,
+        audit: false,
+        title: `Ejercicio 01 · Trabajo de fuerza constante a favor`,
+        prompt: `Un actuador empuja un carro de prueba horizontalmente una distancia d = 10 m aplicando una fuerza constante F = 20 N en la misma dirección y sentido del desplazamiento (θ = 0°). Calcule el trabajo realizado en Joules.`,
+        answer: 200,
+        unit: `J`,
+        tol: 0.015,
+        hint: `Como la fuerza está a favor del movimiento, θ = 0° y cos(0°) = +1.`,
+        steps: [
+          `Identificamos F = 20 N, d = 10 m y θ = 0°.`,
+          `Aplicamos W = F · d · cos(θ) = 20 · 10 · (+1).`,
+          `Resultado: W = +200 J (trabajo motor).`
+        ]
+      },
+      {
+        id: `ex-2`,
+        cat: `trabajo`,
+        audit: false,
+        title: `Ejercicio 02 · Fuerza perpendicular al desplazamiento`,
+        prompt: `Un bloque asciende verticalmente por un elevador mientras una guía lateral ejerce una fuerza horizontal constante F = 30 N durante un ascenso de 4 m. Determine el trabajo realizado por F.`,
+        answer: 0,
+        unit: `J`,
+        tol: 0.015,
+        hint: `Observa el ángulo entre la fuerza horizontal y el desplazamiento vertical.`,
+        steps: [
+          `El desplazamiento es vertical y la fuerza F es horizontal: θ = 90°.`,
+          `cos(90°) = 0.`,
+          `Por lo tanto, W = 30 · 4 · 0 = 0 J.`
+        ]
+      },
+      {
+        id: `ex-3`,
+        cat: `trabajo`,
+        audit: false,
+        title: `Ejercicio 03 · Trabajo neto multifuerza (Ej. 4 PPTX)`,
+        prompt: `Un bloque se desplaza 20 m hacia la derecha bajo la acción de F₁ = 27 N hacia la derecha y F₂ = 13 N hacia la izquierda. Calcule el trabajo neto sobre el bloque.`,
+        answer: 280,
+        unit: `J`,
+        tol: 0.015,
+        hint: `Calcula la fuerza resultante F_R = F₁ − F₂ o suma W₁ + W₂ con sus signos.`,
+        steps: [
+          `W₁ = +27 · 20 = +540 J.`,
+          `W₂ = −13 · 20 = −260 J.`,
+          `W_neto = 540 − 260 = +280 J (equivalente a F_R · d = 14 · 20 = +280 J).`
+        ]
+      },
+      {
+        id: `ex-4`,
+        cat: `trabajo`,
+        audit: false,
+        title: `Ejercicio 04 · Trabajo neto en alambre liso (Ej. 7 PPTX)`,
+        prompt: `Un collarín de 500 g (0,5 kg) es llevado por un alambre liso desde A hasta B avanzando 3 m horizontalmente y subiendo 2 m verticalmente, mediante una fuerza horizontal constante F = 8 N. Considere g = 10 m/s². Calcule el trabajo neto.`,
+        answer: 14,
+        unit: `J`,
+        tol: 0.015,
+        hint: `El peso es Fg = 0,5 · 10 = 5 N hacia abajo. La normal de un alambre liso siempre es perpendicular a la trayectoria (W_N = 0).`,
+        steps: [
+          `Fuerza F horizontal: W_F = +F · d_x = +8 · 3 = +24 J.`,
+          `Peso Fg = 5 N hacia abajo mientras sube 2 m: W_Fg = −5 · 2 = −10 J.`,
+          `Normal en alambre liso: W_N = 0 J.`,
+          `W_neto = 24 − 10 + 0 = +14 J.`
+        ]
+      },
+      {
+        id: `ex-5`,
+        cat: `auditoria`,
+        audit: true,
+        auditBanner: `AUDITORÍA DOCENTE · Signo del trabajo gravitatorio (Ej. 9 PPTX): El solucionario original de la diapositiva reporta "+15 J". Sin embargo, la barra parte de su posición vertical de equilibrio (colgando abajo de A) y se desvía 37°, por lo que su centro de gravedad ASCIENDE Δy = 1,5 − 1,5·cos(37°) = +0,3 m. Como la gravedad apunta hacia abajo y el CG sube, el trabajo realizado POR el peso es necesariamente NEGATIVO (−15 J). +15 J es el trabajo del agente externo.`,
+        title: `Ejercicio 05 · Barra homogénea articulada [Auditoría Docente]`,
+        prompt: `Una barra homogénea AB de 3 m de longitud y 5 kg de masa está articulada en A en posición vertical de equilibrio (hacia abajo). Si se desvía 37° respecto a la vertical (g = 10 m/s², cos 37° = 0,8), calcule el trabajo físico realizado POR EL PESO de la barra.`,
+        answer: -15,
+        unit: `J`,
+        tol: 0.02,
+        acceptOppositeNote: 15,
+        hint: `El centro de gravedad está a 1,5 m de A. Calcula cuánto sube Δh = 1,5 − 1,5·cos(37°) y recuerda que el peso apunta hacia abajo.`,
+        steps: [
+          `Peso Fg = m · g = 5 · 10 = 50 N (hacia abajo).`,
+          `El CG está a L/2 = 1,5 m del pivote A. Al girar 37°, sube Δh = 1,5 − 1,5·(0,8) = 0,3 m.`,
+          `Desplazamiento del CG hacia arriba (opuesto a Fg): W_Fg = −Fg · Δh = −50 · 0,3 = −15 J.`,
+          `Nota de auditoría: El solucionario clásico escribe +15 J (trabajo del agente externo), pero el trabajo de la fuerza gravitatoria es −15 J.`
+        ]
+      },
+      {
+        id: `ex-6`,
+        cat: `variable`,
+        audit: false,
+        title: `Ejercicio 06 · Trabajo de fuerza variable por tramos (Ej. 11 PPTX)`,
+        prompt: `Una fuerza variable F(x) sigue los nodos: (0 m, 5 N) → (1 m, 15 N) → (2 m, 15 N) → (5 m, 0 N) → (7 m, −2 N). Calcule el trabajo total desde x = 0 hasta x = 7 m.`,
+        answer: 45.5,
+        unit: `J`,
+        tol: 0.015,
+        hint: `Suma las áreas de trapecio [0–1], rectángulo [1–2], triángulo positivo [2–5] y resta el triángulo negativo [5–7].`,
+        steps: [
+          `Tramo [0→1]: Trapecio = ((5 + 15)/2) · 1 = +10,0 J.`,
+          `Tramo [1→2]: Rectángulo = 1 · 15 = +15,0 J.`,
+          `Tramo [2→5]: Triángulo = (3 · 15)/2 = +22,5 J.`,
+          `Tramo [5→7]: Triángulo negativo = −(2 · 2)/2 = −2,0 J.`,
+          `Total = 10 + 15 + 22,5 − 2 = +45,5 J.`
+        ]
+      },
+      {
+        id: `ex-7`,
+        cat: `energia`,
+        audit: false,
+        title: `Ejercicio 07 · Energía mecánica de sistema masa–resorte (Ej. 4 PPTX)`,
+        prompt: `Un bloque de m = 1 kg a una altura h = 2 m sobre el piso se mueve con rapidez v = 4 m/s mientras el resorte acoplado (k = 500 N/m) está deformado Δx = 0,1 m. Con g = 10 m/s², halle la energía mecánica total.`,
+        answer: 30.5,
+        unit: `J`,
+        tol: 0.015,
+        hint: `Suma Ec = ½mv², Epg = mgh y Epe = ½k(Δx)².`,
+        steps: [
+          `Ec = 0,5 · 1 · 4² = 8,0 J.`,
+          `Epg = 1 · 10 · 2 = 20,0 J.`,
+          `Epe = 0,5 · 500 · (0,1)² = 2,5 J.`,
+          `Em = 8,0 + 20,0 + 2,5 = 30,5 J.`
+        ]
+      },
+      {
+        id: `ex-8`,
+        cat: `auditoria`,
+        audit: true,
+        auditBanner: `AUDITORÍA DOCENTE · Corrección de altura en resortes (Ej. 6 y Ej. 10 PPTX): Cuando un bloque baja por una rampa y comprime un resorte horizontal en el fondo (h_B = 0), la ecuación ½mv_A² + mgh_A = ½k(Δx)² es exacta. Sin embargo, si el resorte es VERTICAL o inclinado, al comprimirse Δx el cuerpo desciende Δx adicional, por lo que h_B = −Δx (si N.R. se fijó en el extremo libre). ¡Evalúa siempre la cota final real tras la deformación!`,
+        title: `Ejercicio 08 · Compresión en resorte vertical [Auditoría Docente]`,
+        prompt: `Un bloque de 2 kg se deja caer desde el reposo justo sobre el extremo superior de un resorte vertical (k = 500 N/m, g = 10 m/s²) sin deformar (h₀ = 0 en el contacto). Considerando el descenso adicional −Δx durante la compresión hasta detenerse, halle la compresión máxima Δx en metros.`,
+        answer: 0.08,
+        unit: `m`,
+        tol: 0.02,
+        hint: `Al caer Δx desde el reposo, Epg disminuye en mgΔx mientras Epe gana ½k(Δx)². Iguala mgΔx = ½k(Δx)² para Δx > 0.`,
+        steps: [
+          `Si olvidáramos el descenso Δx, creeríamos erróneamente que Δx = 0.`,
+          `Por conservación con cota corregida (h_f = −Δx): 0 = ½k(Δx)² − mgΔx.`,
+          `Despejando Δx > 0: Δx = 2mg / k = (2 · 2 · 10) / 500 = 40 / 500 = 0,08 m (8 cm).`
+        ]
+      },
+      {
+        id: `ex-9`,
+        cat: `energia`,
+        audit: false,
+        title: `Ejercicio 09 · Conservación en pista lisa curva (Ej. 7 PPTX)`,
+        prompt: `Un bloque se suelta desde el reposo en A (h_A = 13 m) sobre una pista curva completamente lisa y pasa por el punto B situado a h_B = 8 m de altura (g = 10 m/s²). Calcule su rapidez en B en m/s.`,
+        answer: 10,
+        unit: `m/s`,
+        tol: 0.015,
+        hint: `Aplica Em_A = Em_B; la masa se cancela en ambos miembros.`,
+        steps: [
+          `Em_A = m · 10 · 13 = 130m.`,
+          `Em_B = ½ m v_B² + m · 10 · 8 = 0,5 m v_B² + 80m.`,
+          `Igualando: 130 = 0,5 v_B² + 80 ⇒ v_B² = 100 ⇒ v_B = 10 m/s.`
+        ]
+      },
+      {
+        id: `ex-10`,
+        cat: `energia`,
+        audit: false,
+        title: `Ejercicio 10 · Disipación por fricción en plano inclinado (Ref. 8 PPTX)`,
+        prompt: `Un cuerpo de m = 1 kg es lanzado hacia arriba por un plano inclinado rugoso con rapidez inicial v_i = 16 m/s y logra alcanzar una altura máxima h_max = 12 m antes de detenerse (g = 10 m/s²). Calcule el trabajo efectuado por la fricción.`,
+        answer: -8,
+        unit: `J`,
+        tol: 0.02,
+        hint: `Usa W_fk = Em_final − Em_inicial. Al detenerse en la cima solo hay energía potencial.`,
+        steps: [
+          `Em_i = ½ · 1 · 16² = 128 J.`,
+          `Em_f = 1 · 10 · 12 = 120 J.`,
+          `W_fk = Em_f − Em_i = 120 − 128 = −8 J (8 J disipados en calor).`
+        ]
+      }
+    ];
+
+    let currentExerciseFilter = `all`;
+
+    function parseDecimalInput(raw) {
+      if (typeof raw !== `string`) return NaN;
+      const cleaned = raw.trim().replace(/\s+/g, ``).replace(`,`, `.`);
+      if (cleaned === ``) return NaN;
+      return Number(cleaned);
+    }
+
+    function filterExercises(cat, btn) {
+      currentExerciseFilter = cat;
+      document.querySelectorAll(`.ex-filter-btn`).forEach((b) => {
+        b.classList.remove(`btn-primary`);
+        b.classList.add(`btn-ghost`);
+      });
+      if (btn) {
+        btn.classList.remove(`btn-ghost`);
+        btn.classList.add(`btn-primary`);
+      }
+      renderExercises(cat);
+    }
+
+    function renderExercises(cat) {
+      const container = document.getElementById(`exercises-container`);
+      if (!container) return;
+      const list = cat === `all` ? EXERCISES_DATA : EXERCISES_DATA.filter((e) => e.cat === cat);
+
+      container.innerHTML = list.map((ex) => {
+        const solved = appState.solvedExercises.includes(ex.id);
+        return `
+          <article class="exercise-card ${solved ? `is-solved` : ``} ${ex.audit ? `has-audit` : ``}" id="card-${ex.id}">
+            <div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap: var(--space-sm); margin-bottom: var(--space-sm);">
+              <div>
+                <span class="mono-label">${ex.cat.toUpperCase()}</span>
+                <h3 class="subhead">${ex.title}</h3>
+              </div>
+              <div style="display:flex; gap: var(--space-xs); align-items:center;">
+                ${ex.audit ? `<span class="tag tag-warning">Auditoría Docente</span>` : ``}
+                ${solved ? `<span class="tag tag-positive">Validado</span>` : ``}
+              </div>
+            </div>
+
+            ${ex.audit ? `
+              <div class="callout callout-warning" style="margin-bottom: var(--space-md);">
+                <span class="mono-label">Advertencia de Auditoría Docente</span>
+                <span style="font-size:0.875rem;">${ex.auditBanner}</span>
+              </div>
+            ` : ``}
+
+            <p style="margin:0;">${ex.prompt}</p>
+
+            <div class="answer-row">
+              <div class="field-group">
+                <label class="field-label" for="ans-${ex.id}"><span>Tu respuesta (${ex.unit})</span></label>
+                <input type="text" inputmode="decimal" id="ans-${ex.id}" class="input-box" placeholder="Ej. ${ex.answer}" aria-describedby="fb-${ex.id}">
+              </div>
+              <button type="button" class="btn btn-primary btn-sm" onclick="checkExercise('${ex.id}')">Comprobar</button>
+              <button type="button" class="btn btn-ghost btn-sm" onclick="toggleHint('${ex.id}')">Pista</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="toggleSteps('${ex.id}')">Solución paso a paso</button>
+            </div>
+
+            <div id="fb-${ex.id}" class="feedback-box" aria-live="polite"></div>
+            <div id="hint-${ex.id}" class="callout" style="display:none; margin-top: var(--space-sm);">
+              <span class="mono-label">Pista conceptual</span>
+              <span>${ex.hint}</span>
+            </div>
+            <div id="steps-${ex.id}" class="layer-nested" style="display:none; margin-top: var(--space-sm);">
+              <span class="mono-label">Resolución desglosada</span>
+              <ol class="step-list">${ex.steps.map((s) => `<li>${s}</li>`).join(``)}</ol>
+            </div>
+          </article>
+        `;
+      }).join(``);
+    }
+
+    function checkExercise(exId) {
+      const ex = EXERCISES_DATA.find((e) => e.id === exId);
+      const input = document.getElementById(`ans-${exId}`);
+      const fb = document.getElementById(`fb-${exId}`);
+      if (!ex || !input || !fb) return;
+
+      const val = parseDecimalInput(input.value);
+      if (isNaN(val)) {
+        fb.innerHTML = `<div class="callout callout-error"><strong>Entrada no válida:</strong> Ingresa un número (se admite coma o punto decimal, con signo si es negativo).</div>`;
+        return;
+      }
+
+      if (ex.acceptOppositeNote !== undefined && Math.abs(val - ex.acceptOppositeNote) <= 0.3) {
+        fb.innerHTML = `<div class="callout callout-warning"><strong>Cuidado con el signo físico (+15 vs −15):</strong> El solucionario clásico muestra +15 J, pero esa cifra corresponde al agente externo. El trabajo <em>del peso</em> al subir la barra es <strong>−15 J</strong>. Intenta corregirlo con el signo negativo.</div>`;
+        return;
+      }
+
+      const absTol = ex.answer === 0 ? 0.05 : Math.abs(ex.answer) * ex.tol;
+      const isSignOk = (ex.answer === 0) || (val * ex.answer > 0);
+      const isOk = isSignOk && Math.abs(val - ex.answer) <= absTol;
+
+      if (isOk) {
+        fb.innerHTML = `<div class="callout callout-positive"><strong>Correcto (${ex.answer} ${ex.unit}):</strong> Validación física superada dentro de la tolerancia de cálculo.</div>`;
+        if (!appState.solvedExercises.includes(exId)) {
+          appState.solvedExercises.push(exId);
+          updateProgressUI();
+          saveAppState();
+          const card = document.getElementById(`card-${exId}`);
+          if (card) card.classList.add(`is-solved`);
+        }
+      } else if (!isSignOk && Math.abs(Math.abs(val) - Math.abs(ex.answer)) <= absTol) {
+        fb.innerHTML = `<div class="callout callout-error"><strong>Magnitud correcta, signo incorrecto:</strong> Revisa si la fuerza actúa a favor (+) o en contra (−) del movimiento.</div>`;
+      } else {
+        fb.innerHTML = `<div class="callout callout-error"><strong>Incorrecto:</strong> Tu respuesta (${val} ${ex.unit}) no coincide con el balance físico esperado. Usa el botón de pista o revisa las unidades del SI.</div>`;
+      }
+    }
+
+    function toggleHint(exId) {
+      const el = document.getElementById(`hint-${exId}`);
+      if (el) el.style.display = el.style.display === `none` ? `flex` : `none`;
+    }
+    function toggleSteps(exId) {
+      const el = document.getElementById(`steps-${exId}`);
+      if (el) el.style.display = el.style.display === `none` ? `block` : `none`;
+    }
+
+    /* =====================================================================
+       INTERACTIVE SUPPORT CALCULATOR
+       ===================================================================== */
+    function switchCalcMode() {
+      const mode = document.getElementById(`calc-mode`)?.value || `work`;
+      const area = document.getElementById(`calc-inputs-area`);
+      if (!area) return;
+
+      if (mode === `work`) {
+        area.innerHTML = `
+          <div class="field-group"><label class="field-label" for="c-w-f"><span>Fuerza F [N]</span></label><input type="text" id="c-w-f" class="input-box" value="25" oninput="computeCalc()"></div>
+          <div class="field-group"><label class="field-label" for="c-w-d"><span>Desplazamiento d [m]</span></label><input type="text" id="c-w-d" class="input-box" value="12" oninput="computeCalc()"></div>
+          <div class="field-group"><label class="field-label" for="c-w-th"><span>Ángulo θ [grados]</span></label><input type="text" id="c-w-th" class="input-box" value="37" oninput="computeCalc()"></div>
+        `;
+      } else if (mode === `energy`) {
+        area.innerHTML = `
+          <div class="field-group"><label class="field-label" for="c-e-m"><span>Masa m [kg]</span></label><input type="text" id="c-e-m" class="input-box" value="2" oninput="computeCalc()"></div>
+          <div class="field-group"><label class="field-label" for="c-e-v"><span>Rapidez v [m/s]</span></label><input type="text" id="c-e-v" class="input-box" value="4" oninput="computeCalc()"></div>
+          <div class="field-group"><label class="field-label" for="c-e-h"><span>Altura h [m]</span></label><input type="text" id="c-e-h" class="input-box" value="4" oninput="computeCalc()"></div>
+          <div class="field-group"><label class="field-label" for="c-e-k"><span>Rigidez k [N/m]</span></label><input type="text" id="c-e-k" class="input-box" value="100" oninput="computeCalc()"></div>
+          <div class="field-group"><label class="field-label" for="c-e-x"><span>Deformación Δx [m]</span></label><input type="text" id="c-e-x" class="input-box" value="0.2" oninput="computeCalc()"></div>
+          <div class="field-group"><label class="field-label" for="c-e-g"><span>Gravedad g [m/s²]</span></label><input type="text" id="c-e-g" class="input-box" value="10" oninput="computeCalc()"></div>
+        `;
+      } else if (mode === `theorem`) {
+        area.innerHTML = `
+          <div class="field-group"><label class="field-label" for="c-t-emi"><span>Energía mecánica inicial Em_i [J]</span></label><input type="text" id="c-t-emi" class="input-box" value="128" oninput="computeCalc()"></div>
+          <div class="field-group"><label class="field-label" for="c-t-emf"><span>Energía mecánica final Em_f [J]</span></label><input type="text" id="c-t-emf" class="input-box" value="120" oninput="computeCalc()"></div>
+        `;
+      } else {
+        area.innerHTML = `
+          <div class="field-group"><label class="field-label" for="c-u-val"><span>Valor de energía</span></label><input type="text" id="c-u-val" class="input-box" value="3600" oninput="computeCalc()"></div>
+          <div class="field-group"><label class="field-label" for="c-u-unit"><span>Unidad origen</span></label>
+            <select id="c-u-unit" class="input-box" onchange="computeCalc()">
+              <option value="J">Joules (J)</option>
+              <option value="kJ">Kilojoules (kJ)</option>
+              <option value="Wh">Watt-hora (Wh)</option>
+              <option value="kcal">Kilocalorías (kcal)</option>
+            </select>
+          </div>
+        `;
+      }
+      computeCalc();
+    }
+
+    function calcLoadPreset() {
+      switchCalcMode();
+    }
+
+    function computeCalc() {
+      const mode = document.getElementById(`calc-mode`)?.value || `work`;
+      const lbl = document.getElementById(`calc-res-label`);
+      const valEl = document.getElementById(`calc-res-value`);
+      const noteEl = document.getElementById(`calc-res-note`);
+      const stepsEl = document.getElementById(`calc-steps`);
+      if (!lbl || !valEl || !noteEl || !stepsEl) return;
+
+      const p = (id) => parseDecimalInput(document.getElementById(id)?.value || ``);
+
+      if (mode === `work`) {
+        const f = p(`c-w-f`), d = p(`c-w-d`), th = p(`c-w-th`);
+        if ([f, d, th].some(isNaN)) {
+          valEl.textContent = `—`;
+          noteEl.textContent = `Ingresa valores numéricos válidos.`;
+          stepsEl.innerHTML = ``;
+          return;
+        }
+        const cosT = Math.cos(th * Math.PI / 180);
+        const W = f * d * cosT;
+        lbl.textContent = `Trabajo Mecánico W`;
+        valEl.textContent = `${W >= 0 ? `+` : ``}${W.toFixed(2)} J`;
+        noteEl.textContent = Math.abs(W) < 1e-4 ? `Trabajo nulo (fuerza perpendicular).` : (W > 0 ? `Trabajo motor a favor del movimiento.` : `Trabajo resistente en contra del movimiento.`);
+        stepsEl.innerHTML = `cos(${th}°) = ${cosT.toFixed(4)}<br>W = ${f} N · ${d} m · (${cosT.toFixed(4)}) = <strong>${W.toFixed(3)} J</strong>`;
+      } else if (mode === `energy`) {
+        const m = p(`c-e-m`), v = p(`c-e-v`), h = p(`c-e-h`), k = p(`c-e-k`), x = p(`c-e-x`), g = p(`c-e-g`);
+        if ([m, v, h, k, x, g].some(isNaN)) {
+          valEl.textContent = `—`;
+          noteEl.textContent = `Completa todos los campos numéricos.`;
+          stepsEl.innerHTML = ``;
+          return;
+        }
+        const ec = 0.5 * m * v * v;
+        const epg = m * g * h;
+        const epe = 0.5 * k * x * x;
+        const em = ec + epg + epe;
+        lbl.textContent = `Energía Mecánica Total Em`;
+        valEl.textContent = `${em.toFixed(2)} J`;
+        noteEl.textContent = `Suma escalar Ec + Epg + Epe.`;
+        stepsEl.innerHTML = `Ec = 0.5 · ${m} · ${v}² = ${ec.toFixed(2)} J<br>Epg = ${m} · ${g} · ${h} = ${epg.toFixed(2)} J<br>Epe = 0.5 · ${k} · ${x}² = ${epe.toFixed(2)} J<br>Em = <strong>${em.toFixed(2)} J</strong>`;
+      } else if (mode === `theorem`) {
+        const emi = p(`c-t-emi`), emf = p(`c-t-emf`);
+        if ([emi, emf].some(isNaN)) {
+          valEl.textContent = `—`;
+          noteEl.textContent = `Ingresa energías iniciales y finales.`;
+          stepsEl.innerHTML = ``;
+          return;
+        }
+        const dw = emf - emi;
+        lbl.textContent = `Trabajo No Conservativo W_fnc`;
+        valEl.textContent = `${dw >= 0 ? `+` : ``}${dw.toFixed(2)} J`;
+        noteEl.textContent = dw < 0 ? `Disipación energética (p. ej. fricción).` : (dw > 0 ? `Inyección de energía externa (p. ej. motor).` : `Sistema conservativo (ΔEm = 0).`);
+        stepsEl.innerHTML = `W_fnc = Em_f − Em_i = ${emf} − ${emi} = <strong>${dw.toFixed(2)} J</strong>`;
+      } else {
+        const v = p(`c-u-val`);
+        const unit = document.getElementById(`c-u-unit`)?.value || `J`;
+        if (isNaN(v)) {
+          valEl.textContent = `—`;
+          noteEl.textContent = `Ingresa una cantidad numérica.`;
+          stepsEl.innerHTML = ``;
+          return;
+        }
+        let joules = v;
+        if (unit === `kJ`) joules = v * 1000;
+        else if (unit === `Wh`) joules = v * 3600;
+        else if (unit === `kcal`) joules = v * 4184;
+
+        lbl.textContent = `Equivalente en Joules (SI)`;
+        valEl.textContent = `${joules.toFixed(2)} J`;
+        noteEl.textContent = `Conversión exacta para análisis de actuadores y baterías.`;
+        stepsEl.innerHTML = `• ${(joules).toFixed(2)} J<br>• ${(joules / 1000).toFixed(4)} kJ<br>• ${(joules / 3600).toFixed(4)} Wh<br>• ${(joules / 4184).toFixed(4)} kcal`;
+      }
+    }
+
+    /* =====================================================================
+       BOOTSTRAP & RESIZE HANDLER
+       ===================================================================== */
+    async function initApp() {
+      await loadAppState();
+      renderHomeSimCards();
+      renderLessons();
+      s3RenderInputs();
+      renderExercises(`all`);
+      switchCalcMode();
+      initS1Drag();
+      initS3Drag();
+      applyTheme();
+      updateProgressUI();
+      switchView(appState.activeView);
+
+      window.addEventListener(`resize`, () => {
+        redrawActiveSim();
+      });
+
+      if (window.lucide && typeof window.lucide.createIcons === `function`) {
+        window.lucide.createIcons();
+      }
+      if (window.notebookAppApi && typeof window.notebookAppApi.notifyAppReady === `function`) {
+        window.notebookAppApi.notifyAppReady();
+      }
+    }
+
+    document.addEventListener(`DOMContentLoaded`, initApp);
+  </script>
+</body>
+</html>
